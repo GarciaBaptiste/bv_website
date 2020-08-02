@@ -12,11 +12,11 @@ body {
 #context {
   width: 100vw;
   height: 100vh;
-  background: black;
+  background: white;
 }
 
 #loader {
-  color: white;
+  color: black;
   line-height: 100vh;
   text-align: center;
   position: fixed;

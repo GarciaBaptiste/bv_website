@@ -6,8 +6,6 @@ let worldScene = null;
 let renderer = null;
 let camera = null;
 let clock = null;
-let forwardSpeed = 0,
-  straffeSpeed = 0;
 
 let MODELS = [{ name: "room" }];
 
