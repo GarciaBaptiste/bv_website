@@ -11,8 +11,6 @@ let MODELS = [{ name: "room" }];
 
 let numLoadedModels = 0;
 
-let imagesContainer;
-
 function setup() {
   initScene();
   initRenderer();
@@ -22,7 +20,7 @@ function setup() {
 function loadModels() {
   for (let i = 0; i < MODELS.length; ++i) {
     const m = MODELS[i];
-    loadGltfModel(m, function () {
+    loadGltfModel(m, function() {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
         document.getElementById("loader").style.display = "none";
@@ -37,11 +35,11 @@ function loadGltfModel(model, onLoaded) {
   const modelName = "models/" + model.name + ".gltf";
   loader.load(
     modelName,
-    function (gltf) {
+    function(gltf) {
       let scene = gltf.scene;
       model.scene = scene;
 
-      gltf.scene.traverse(function (object) {
+      gltf.scene.traverse(function(object) {
         if (object.isMesh) {
           object.castShadow = true;
           object.receiveShadow = true;
@@ -56,7 +54,7 @@ function loadGltfModel(model, onLoaded) {
       });
       onLoaded();
     },
-    function (xhr) {
+    function(xhr) {
       document.getElementById("loader").innerText =
         "Loading model " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
     }
@@ -117,16 +115,6 @@ function initScene() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function setupScene() {
-  imagesContainer = document.getElementById("images-plan-selector");
-  let images = document.getElementById("images-plan").children;
-  console.log(images);
-  for (var i = 0; i < images.length; i++) {
-    let valueX = Math.random() * 100;
-    let valueY = Math.random() * 100;
-    images[i].style.left = "calc(" + valueX + "% - " + valueX / 5 + "vw)";
-    images[i].style.top = "calc(" + valueY + "% - " + valueY / 5 + "vw)";
-  }
-
   const mesh = MODELS[0].scene;
   worldScene.add(mesh);
 
@@ -149,7 +137,4 @@ function mouseMoved(evt) {
   camera.rotation.y = (ratioX / 3.6) * 0.94 + 0.12;
   let ratioY = evt.clientY / window.innerHeight;
   camera.position.y = 7 - ratioY;
-
-  imagesContainer.style.left = (1 - ratioX) * 100 + "vw";
-  imagesContainer.style.top = (1 - ratioY) * 100 + "vh";
 }
