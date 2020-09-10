@@ -49,17 +49,17 @@ canvas {
 .content {
   width: 50%;
   margin-left: 10%;
-  opacity: 0.1;
+  /* opacity: 0.1; */
 }
 
 p {
   font-family: sans-serif;
   font-size: 2vw;
-  margin-top: 4vw;
+  margin-top: 10vw;
 }
 
 h1 {
   font-family: sans-serif;
   font-size: 4vw;
-  margin-top: 8vw;
+  margin-top: 20vw;
 }
