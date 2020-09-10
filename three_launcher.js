@@ -6,25 +6,27 @@ let worldScene = null;
 let renderer = null;
 let camera = null;
 let clock = null;
+let mixer = null;
+let gltf = null;
 
-let MODELS = [{ name: "room" }];
+let MODELS = [{ name: "test_camera_anim" }];
 
 let numLoadedModels = 0;
 
 function setup() {
-  initScene();
-  initRenderer();
+  document.getElementById("content-page").addEventListener("scroll", scrolled);
   loadModels();
 }
 
 function loadModels() {
   for (let i = 0; i < MODELS.length; ++i) {
     const m = MODELS[i];
-    loadGltfModel(m, function() {
+    loadGltfModel(m, function () {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
         document.getElementById("loader").style.display = "none";
-        setupScene();
+        initRenderer();
+        initScene();
       }
     });
   }
@@ -35,11 +37,13 @@ function loadGltfModel(model, onLoaded) {
   const modelName = "models/" + model.name + ".gltf";
   loader.load(
     modelName,
-    function(gltf) {
+    function (gltf_response) {
+      gltf = gltf_response;
       let scene = gltf.scene;
+      camera = gltf.cameras[0];
       model.scene = scene;
 
-      gltf.scene.traverse(function(object) {
+      gltf.scene.traverse(function (object) {
         if (object.isMesh) {
           object.castShadow = true;
           object.receiveShadow = true;
@@ -54,16 +58,11 @@ function loadGltfModel(model, onLoaded) {
       });
       onLoaded();
     },
-    function(xhr) {
+    function (xhr) {
       document.getElementById("loader").innerText =
         "Loading model " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
     }
   );
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(worldScene, camera);
 }
 
 function initRenderer() {
@@ -78,18 +77,20 @@ function initRenderer() {
 }
 
 function initScene() {
-  camera = new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    5000
-  );
-  camera.rotation.order = "YXZ";
-  camera.position.x = 16;
-  camera.position.y = 5;
-  camera.position.z = 16;
-  camera.rotation.x = -0.0925;
-  camera.rotation.y = 0.59;
+  // camera = new THREE.PerspectiveCamera(
+  //   40,
+  //   window.innerWidth / window.innerHeight,
+  //   0.1,
+  //   5000
+  // );
+  // camera.rotation.order = "YXZ";
+  // camera.position.x = 16;
+  // camera.position.y = 5;
+  // camera.position.z = 16;
+  // camera.rotation.x = -0.0925;
+  // camera.rotation.y = 0.59;
+
+  // camera = MODELS[0]
 
   clock = new THREE.Clock();
 
@@ -110,15 +111,30 @@ function initScene() {
   light.shadow.camera.far = 100;
   light.shadow.bias = -0.005;
   light.shadow.radius = 10;
-}
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function setupScene() {
   const mesh = MODELS[0].scene;
+  console.log(MODELS[0].cameras);
   worldScene.add(mesh);
 
+  mixer = new THREE.AnimationMixer(camera);
+  mixer.clipAction(gltf.animations[0]).play();
   animate();
+}
+
+function animate() {
+  console.log(camera.position);
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  var delta = clock.getDelta();
+
+  if (mixer) {
+    mixer.update(delta);
+  }
+
+  renderer.render(worldScene, camera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,11 +146,15 @@ function onWindowResize() {
 }
 
 function mouseMoved(evt) {
-  let ratioX = evt.clientX / window.innerWidth;
-  camera.position.x = (ratioX / 3) * 24 + 4;
-  camera.position.z = (1 - ratioX / 3) * 16 + 8;
-  camera.rotation.x = -((ratioX / 3.6) * 0.025 + 0.08);
-  camera.rotation.y = (ratioX / 3.6) * 0.94 + 0.12;
-  let ratioY = evt.clientY / window.innerHeight;
-  camera.position.y = 7 - ratioY;
+  // let ratioX = evt.clientX / window.innerWidth;
+  // camera.position.x = (ratioX / 3) * 24 + 4;
+  // camera.position.z = (1 - ratioX / 3) * 16 + 8;
+  // camera.rotation.x = -((ratioX / 3.6) * 0.025 + 0.08);
+  // camera.rotation.y = (ratioX / 3.6) * 0.94 + 0.12;
+  // let ratioY = evt.clientY / window.innerHeight;
+  // camera.position.y = 7 - ratioY;
+}
+
+function scrolled(evt) {
+  console.log(evt.target.scrollTop);
 }
