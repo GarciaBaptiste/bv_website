@@ -3,13 +3,36 @@
         "generator" : "Khronos glTF Blender I/O v1.1.46",
         "version" : "2.0"
     },
+    "extensionsUsed" : [
+        "KHR_lights_punctual"
+    ],
+    "extensionsRequired" : [
+        "KHR_lights_punctual"
+    ],
+    "extensions" : {
+        "KHR_lights_punctual" : {
+            "lights" : [
+                {
+                    "color" : [
+                        1,
+                        1,
+                        1
+                    ],
+                    "intensity" : 0.125,
+                    "type" : "point",
+                    "name" : "Point.001"
+                }
+            ]
+        }
+    },
     "scene" : 0,
     "scenes" : [
         {
             "name" : "Scene",
             "nodes" : [
                 0,
-                1
+                1,
+                2
             ]
         }
     ],
@@ -37,13 +60,26 @@
                 0.6550054550170898,
                 0.6550054550170898
             ]
+        },
+        {
+            "extensions" : {
+                "KHR_lights_punctual" : {
+                    "light" : 0
+                }
+            },
+            "name" : "Point",
+            "translation" : [
+                6.044060707092285,
+                -12.022780418395996,
+                7.615030288696289
+            ]
         }
     ],
     "cameras" : [
         {
             "name" : "Camera",
             "perspective" : {
-                "yfov" : 1.1283951805128494,
+                "yfov" : 0.6939551846210171,
                 "zfar" : 1000,
                 "znear" : 0.009999999776482582
             },
@@ -100,7 +136,7 @@
                     1
                 ],
                 "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
+                "roughnessFactor" : 1
             }
         }
     ],

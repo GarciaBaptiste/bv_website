@@ -3,7 +3,6 @@ window.addEventListener("resize", onWindowResize, false);
 
 let worldScene = null;
 let renderer = null;
-let mesh = null;
 let camera = null;
 let clock = null;
 let mixer = null;
@@ -52,8 +51,9 @@ function loadGltfModel(model, onLoaded) {
           object.shadow.mapSize.width = 2048;
           object.shadow.mapSize.height = 2048;
           object.shadow.camera.near = 0.1;
-          object.shadow.camera.far = 500;
+          object.shadow.camera.far = 50;
           object.shadow.bias = -0.005;
+          object.shadow.radius = 10;
         }
       });
       onLoaded();
@@ -77,19 +77,33 @@ function initRenderer() {
 }
 
 function initScene() {
+  camera = new THREE.PerspectiveCamera(
+    40,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    5000
+  );
+  camera.rotation.order = "YXZ";
+  camera.position.x = 16;
+  camera.position.y = 5;
+  camera.position.z = 16;
+  camera.rotation.x = -0.0925;
+  camera.rotation.y = 0.59;
+
   clock = new THREE.Clock();
 
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 0, 80);
+  worldScene.fog = new THREE.Fog(0xffffff, 5, 100);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.75);
+  const hlight = new THREE.AmbientLight(0xffffff, 0.9);
   worldScene.add(hlight);
 
-  mesh = MODELS[0].scene;
+  const mesh = MODELS[0].scene;
   worldScene.add(mesh);
 
   mixer = new THREE.AnimationMixer(camera);
+
   mixer.clipAction(gltf.animations[0]).play();
   animate();
 }
@@ -100,7 +114,7 @@ function animate() {
 }
 
 function render() {
-  var delta = clock.getDelta();
+  var delta = 0;
 
   if (mixer) {
     mixer.update(delta);
@@ -118,5 +132,5 @@ function onWindowResize() {
 }
 
 function scrolled(evt) {
-  console.log(evt.target.scrollTop);
+  mixer.setTime((evt.target.scrollTop / 4000) * 8.5);
 }
