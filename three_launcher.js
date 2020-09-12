@@ -10,7 +10,7 @@ let gltf = null;
 let content = null,
   contentPage = null,
   contentHeight = 0;
-const animLength = 8.3;
+let animLength = null;
 
 let MODELS = [{ name: "test_camera_anim" }];
 
@@ -31,6 +31,10 @@ function loadModels() {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
         document.getElementById("loader").className = "hidden";
+        window.setTimeout(
+          () => (document.getElementById("loader").style.display = "none"),
+          500
+        );
         initRenderer();
         initScene();
       }
@@ -84,6 +88,7 @@ function initRenderer() {
 }
 
 function initScene() {
+  animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
   camera = new THREE.PerspectiveCamera(
     40,
     window.innerWidth / window.innerHeight,
