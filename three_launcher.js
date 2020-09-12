@@ -92,13 +92,8 @@ function initRenderer() {
 }
 
 function initScene() {
+  window.addEventListener("mousemove", mouseMoved);
   animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
-  camera = new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    5000
-  );
 
   clock = new THREE.Clock();
 
@@ -115,7 +110,6 @@ function initScene() {
   mixer = new THREE.AnimationMixer(camera);
 
   mixer.clipAction(gltf.animations[0]).play();
-  console.log(camera.position.x);
   animate();
 }
 
@@ -159,4 +153,8 @@ function onWindowResize() {
 
 function scrolled() {
   mixer.setTime(scrollRatio() * animLength);
+}
+
+function mouseMoved(evt) {
+  camera.rotation.y += evt.movementX * 0.00002;
 }
