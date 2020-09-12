@@ -7,7 +7,10 @@ let camera = null;
 let clock = null;
 let mixer = null;
 let gltf = null;
-let content = null;
+let content = null,
+  contentPage = null,
+  contentHeight = 0;
+const animLength = 8.3;
 
 let MODELS = [{ name: "test_camera_anim" }];
 
@@ -15,17 +18,19 @@ let numLoadedModels = 0;
 
 function setup() {
   document.getElementById("content-page").addEventListener("scroll", scrolled);
-  content = document.getElementById('content');
+  content = document.getElementById("content");
+  contentPage = document.getElementById("content-page");
+  setContentHeight();
   loadModels();
 }
 
 function loadModels() {
   for (let i = 0; i < MODELS.length; ++i) {
     const m = MODELS[i];
-    loadGltfModel(m, function() {
+    loadGltfModel(m, function () {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
-        document.getElementById("loader").style.display = "none";
+        document.getElementById("loader").className = "hidden";
         initRenderer();
         initScene();
       }
@@ -38,13 +43,13 @@ function loadGltfModel(model, onLoaded) {
   const modelName = "models/" + model.name + ".gltf";
   loader.load(
     modelName,
-    function(gltf_response) {
+    function (gltf_response) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
       model.scene = scene;
 
-      gltf.scene.traverse(function(object) {
+      gltf.scene.traverse(function (object) {
         if (object.isMesh) {
           object.castShadow = true;
           object.receiveShadow = true;
@@ -60,7 +65,7 @@ function loadGltfModel(model, onLoaded) {
       });
       onLoaded();
     },
-    function(xhr) {
+    function (xhr) {
       document.getElementById("loader").innerText =
         "Loading model " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
     }
@@ -133,17 +138,21 @@ function setSizeCamera() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function contentSize() {
-  return content.offsetHeight - window.innerHeight;
+function setContentHeight() {
+  contentHeight = content.offsetHeight - window.innerHeight;
+}
+
+function scrollRatio() {
+  return contentPage.scrollTop / contentHeight;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function onWindowResize() {
+  setContentHeight();
   setSizeCamera();
 }
 
-function scrolled(evt) {
-  console.log(evt.target.scrollTop);
-  mixer.setTime((evt.target.scrollTop / 4000) * 8.5);
+function scrolled() {
+  mixer.setTime(scrollRatio() * animLength);
 }

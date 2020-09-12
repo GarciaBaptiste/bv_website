@@ -28,6 +28,15 @@ body {
   top: 0;
   left: 0;
   z-index: 5;
+  margin: 0;
+  background: white;
+  transition: color 0.3s, background 0.5s 0.3s;
+}
+
+#loader.hidden {
+  color: transparent;
+  background: transparent;
+  pointer-events: none;
 }
 
 canvas {
