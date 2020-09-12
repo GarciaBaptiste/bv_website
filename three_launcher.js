@@ -11,20 +11,16 @@ let content = null,
   contentPage = null,
   contentHeight = 0;
 let animLength = null;
-let cameraCurrentRotation = null;
-let cameraCurrentPosition = null;
 
 let MODELS = [{ name: "test_camera_anim" }];
 
 let numLoadedModels = 0;
 
 function setup() {
-  cameraCurrentRotation = new THREE.Vector3(0, 0, 0);
-  cameraCurrentPosition = new THREE.Vector3(0, 0, 0);
   document.getElementById("content-page").addEventListener("scroll", scrolled);
   content = document.getElementById("content");
   contentPage = document.getElementById("content-page");
-  setContentHeight();
+  getContentHeight();
   loadModels();
 }
 
@@ -94,7 +90,6 @@ function initRenderer() {
 function initScene() {
   window.addEventListener("mousemove", mouseMoved);
   animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
-
   clock = new THREE.Clock();
 
   worldScene = new THREE.Scene();
@@ -108,7 +103,6 @@ function initScene() {
   worldScene.add(mesh);
 
   mixer = new THREE.AnimationMixer(camera);
-
   mixer.clipAction(gltf.animations[0]).play();
   animate();
 }
@@ -119,12 +113,6 @@ function animate() {
 }
 
 function render() {
-  var delta = 0;
-
-  if (mixer) {
-    mixer.update(delta);
-  }
-
   renderer.render(worldScene, camera);
 }
 
@@ -136,7 +124,7 @@ function setSizeCamera() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function setContentHeight() {
+function getContentHeight() {
   contentHeight = content.offsetHeight - window.innerHeight;
 }
 
@@ -147,7 +135,7 @@ function scrollRatio() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function onWindowResize() {
-  setContentHeight();
+  getContentHeight();
   setSizeCamera();
 }
 
