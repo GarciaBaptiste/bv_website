@@ -11,12 +11,16 @@ let content = null,
   contentPage = null,
   contentHeight = 0;
 let animLength = null;
+let cameraCurrentRotation = null;
+let cameraCurrentPosition = null;
 
 let MODELS = [{ name: "test_camera_anim" }];
 
 let numLoadedModels = 0;
 
 function setup() {
+  cameraCurrentRotation = new THREE.Vector3(0, 0, 0);
+  cameraCurrentPosition = new THREE.Vector3(0, 0, 0);
   document.getElementById("content-page").addEventListener("scroll", scrolled);
   content = document.getElementById("content");
   contentPage = document.getElementById("content-page");
@@ -95,12 +99,6 @@ function initScene() {
     0.1,
     5000
   );
-  camera.rotation.order = "YXZ";
-  camera.position.x = 16;
-  camera.position.y = 5;
-  camera.position.z = 16;
-  camera.rotation.x = -0.0925;
-  camera.rotation.y = 0.59;
 
   clock = new THREE.Clock();
 
@@ -117,6 +115,7 @@ function initScene() {
   mixer = new THREE.AnimationMixer(camera);
 
   mixer.clipAction(gltf.animations[0]).play();
+  console.log(camera.position.x);
   animate();
 }
 
