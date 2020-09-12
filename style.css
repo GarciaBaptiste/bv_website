@@ -46,9 +46,10 @@ canvas {
   overflow: auto;
 }
 
-.content {
+#content {
   width: 50%;
   margin-left: 10%;
+  position: absolute;
   /* opacity: 0.1; */
 }
 
