@@ -139,8 +139,13 @@ function onWindowResize() {
   setSizeCamera();
 }
 
+let newTime = 0;
+
 function scrolled() {
-  mixer.setTime(scrollRatio() * animLength);
+  newTime = scrollRatio() * animLength;
+  if (newTime > 0 && newTime < animLength) {
+    mixer.setTime(scrollRatio() * animLength);
+  }
 }
 
 function mouseMoved(evt) {
