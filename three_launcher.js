@@ -12,7 +12,7 @@ let content = null,
   contentHeight = 0;
 let animLength = null;
 
-let MODELS = [{ name: "test_camera_anim" }];
+let MODELS = [{ name: "test_camera_anim2" }];
 
 let numLoadedModels = 0;
 
@@ -51,6 +51,8 @@ function loadGltfModel(model, onLoaded) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
+      console.log(camera);
+      camera.fov = 40;
       model.scene = scene;
 
       gltf.scene.traverse(function (object) {
@@ -92,11 +94,12 @@ function initScene() {
   animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
   clock = new THREE.Clock();
 
+  setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 5, 100);
+  worldScene.fog = new THREE.Fog(0xffffff, 15, 150);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.9);
+  const hlight = new THREE.AmbientLight(0xffffff, 0.85);
   worldScene.add(hlight);
 
   const mesh = MODELS[0].scene;
@@ -136,6 +139,7 @@ function scrollRatio() {
 
 function onWindowResize() {
   getContentHeight();
+  scrolled();
   setSizeCamera();
 }
 
