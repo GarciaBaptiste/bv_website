@@ -11,8 +11,9 @@ let content = null,
   contentPage = null,
   contentHeight = 0;
 let animLength = null;
+let previousScroll = 0;
 
-let MODELS = [{ name: "test_camera_anim2" }];
+let MODELS = [{ name: "test_camera_anim2.glb" }];
 
 let numLoadedModels = 0;
 
@@ -44,29 +45,33 @@ function loadModels() {
 
 function loadGltfModel(model, onLoaded) {
   let loader = new THREE.GLTFLoader();
-  const modelName = "models/" + model.name + ".gltf";
+  const modelName = "models/" + model.name;
   loader.load(
     modelName,
     function (gltf_response) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
-      console.log(camera);
       camera.fov = 40;
+      camera.far = 120;
       model.scene = scene;
 
       gltf.scene.traverse(function (object) {
         if (object.isMesh) {
           object.castShadow = true;
           object.receiveShadow = true;
+          object.matrixAutoUpdate = false;
+          object.updateMatrix();
         } else if (object.isLight) {
           object.castShadow = true;
-          object.shadow.mapSize.width = 2048;
-          object.shadow.mapSize.height = 2048;
+          object.shadow.mapSize.width = 128;
+          object.shadow.mapSize.height = 128;
           object.shadow.camera.near = 0.1;
           object.shadow.camera.far = 50;
           object.shadow.bias = -0.005;
-          object.shadow.radius = 10;
+          object.shadow.radius = 1;
+          object.matrixAutoUpdate = false;
+          object.updateMatrix();
         }
       });
       onLoaded();
@@ -97,7 +102,7 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 15, 150);
+  // worldScene.fog = new THREE.Fog(0xffffff, 10, 120);
 
   const hlight = new THREE.AmbientLight(0xffffff, 0.85);
   worldScene.add(hlight);
@@ -115,7 +120,29 @@ function animate() {
   render();
 }
 
+let goingForward = true;
+let delta = 0.04;
+
 function render() {
+  // const roundedTime = Math.round(mixer.time * 10) / 10;
+  if (mixer) {
+    // if (goingForward) {
+    //   mixer.timeScale = 1;
+    //   if (roundedTime < keyFrames[keyFrameIndex]) {
+    //     delta = 0.04;
+    //   } else {
+    //     delta = 0;
+    //   }
+    // } else {
+    //   mixer.timeScale = -1;
+    //   if (roundedTime > keyFrames[keyFrameIndex]) {
+    //     delta = 0.04;
+    //   } else {
+    //     delta = 0;
+    //   }
+    // }
+    mixer.update(delta);
+  }
   renderer.render(worldScene, camera);
 }
 
@@ -145,11 +172,29 @@ function onWindowResize() {
 
 let newTime = 0;
 
+let keyFrameIndex = 0;
+const keyFrames = [0, 4.8, 8.5, 15, 20, 26, 32, 40, 46];
+
 function scrolled() {
-  newTime = scrollRatio() * animLength;
-  if (newTime > 0 && newTime < animLength) {
-    mixer.setTime(scrollRatio() * animLength);
+  const roundedTime = Math.round(mixer.time * 10) / 10;
+  if (previousScroll < this.scrollTop) {
+    if (
+      roundedTime < keyFrames[keyFrameIndex + 1] &&
+      roundedTime >= keyFrames[keyFrameIndex]
+    ) {
+      keyFrameIndex++;
+      goingForward = true;
+    }
+  } else if (previousScroll > this.scrollTop) {
+    if (
+      roundedTime <= keyFrames[keyFrameIndex] &&
+      roundedTime > keyFrames[keyFrameIndex - 1]
+    ) {
+      keyFrameIndex--;
+      goingForward = false;
+    }
   }
+  previousScroll = this.scrollTop;
 }
 
 function mouseMoved(evt) {
