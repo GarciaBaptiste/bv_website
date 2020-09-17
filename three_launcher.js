@@ -1,3 +1,6 @@
+import * as THREE from "./build/three.module.js";
+import { GLTFLoader } from "./loaders/GLTFLoader.js";
+
 window.addEventListener("load", setup);
 window.addEventListener("resize", onWindowResize, false);
 
@@ -44,7 +47,7 @@ function loadModels() {
 }
 
 function loadGltfModel(model, onLoaded) {
-  let loader = new THREE.GLTFLoader();
+  let loader = new GLTFLoader();
   const modelName = "models/" + model.name;
   loader.load(
     modelName,
@@ -64,8 +67,8 @@ function loadGltfModel(model, onLoaded) {
           object.updateMatrix();
         } else if (object.isLight) {
           object.castShadow = true;
-          object.shadow.mapSize.width = 128;
-          object.shadow.mapSize.height = 128;
+          // object.shadow.mapSize.width = 32;
+          // object.shadow.mapSize.height = 32;
           object.shadow.camera.near = 0.1;
           object.shadow.camera.far = 50;
           object.shadow.bias = -0.005;
@@ -90,7 +93,7 @@ function initRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.BasicShadowMap;
   container.appendChild(renderer.domElement);
 }
 
@@ -121,7 +124,7 @@ function animate() {
 }
 
 let goingForward = true;
-let delta = 0.04;
+let delta = 0.02;
 
 function render() {
   // const roundedTime = Math.round(mixer.time * 10) / 10;
@@ -141,6 +144,7 @@ function render() {
     //     delta = 0;
     //   }
     // }
+    var delta = clock.getDelta();
     mixer.update(delta);
   }
   renderer.render(worldScene, camera);
