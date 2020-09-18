@@ -128,8 +128,10 @@ let lastLoop = new Date();
 let fps = 1;
 
 window.setInterval(function () {
-  if (fps < 25) {
-    testLowerSettings();
+  if (fps < 20) {
+    testLowerSettings(0);
+  } else if (fps < 25) {
+    testLowerSettings(2);
   } else if (fps > 58) {
     testHigherSettings();
   }
@@ -139,6 +141,7 @@ function render() {
   const thisLoop = new Date();
   fps = 1000 / (thisLoop - lastLoop);
   lastLoop = thisLoop;
+  contentPage.firstElementChild.firstElementChild.innerHTML = fps;
   // const roundedTime = Math.round(mixer.time * 10) / 10;
   if (mixer) {
     // if (goingForward) {
@@ -192,8 +195,8 @@ const graphicSettings = [
   { shadowMap: true, mapSize: 1024, fog: true, bias: -0.003 },
 ];
 
-function testLowerSettings() {
-  if (graphicSettingsIndex > 0) {
+function testLowerSettings(limit) {
+  if (graphicSettingsIndex > limit) {
     graphicSettingsIndex--;
     resetGraphicSettings();
   }
