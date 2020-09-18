@@ -57,7 +57,7 @@ function loadGltfModel(model, onLoaded) {
       let scene = gltf.scene;
       camera = gltf.cameras[0];
       camera.fov = 40;
-      camera.far = 120;
+      camera.far = 75;
       model.scene = scene;
       gltf.scene.traverse(function (object) {
         if (object.isMesh) {
@@ -102,7 +102,7 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 5, 100);
+  worldScene.fog = new THREE.Fog(0xffffff, 2, 70);
 
   const hlight = new THREE.AmbientLight(0xffffff, 0.5);
   worldScene.add(hlight);
@@ -121,45 +121,58 @@ function animate() {
 }
 
 let goingForward = true;
-let delta = 0.02;
+let delta = 0;
 
 let lastLoop = new Date();
 
 let fps = 1;
+let canGoHigher = true;
 
 window.setInterval(function () {
-  if (fps < 20) {
-    testLowerSettings(0);
-  } else if (fps < 25) {
-    testLowerSettings(2);
-  } else if (fps > 58) {
-    testHigherSettings();
+  if (canGoHigher) {
+    if (fps < 20) {
+      testLowerSettings(0);
+    } else if (fps < 25) {
+      testLowerSettings(2);
+    } else if (fps > 58) {
+      testHigherSettings();
+    }
   }
 }, 3000);
 
-function render() {
+function countFps() {
   const thisLoop = new Date();
   fps = 1000 / (thisLoop - lastLoop);
   lastLoop = thisLoop;
-  contentPage.firstElementChild.firstElementChild.innerHTML = fps;
-  // const roundedTime = Math.round(mixer.time * 10) / 10;
+}
+
+function render() {
+  if (canGoHigher) {
+    countFps();
+  }
+  contentPage.firstElementChild.firstElementChild.innerHTML =
+    graphicSettingsIndex +
+    " / " +
+    Math.round(fps) +
+    " can go higher = " +
+    canGoHigher;
+  const roundedTime = Math.round(mixer.time * 10) / 10;
   if (mixer) {
-    // if (goingForward) {
-    //   mixer.timeScale = 1;
-    //   if (roundedTime < keyFrames[keyFrameIndex]) {
-    //     delta = 0.04;
-    //   } else {
-    //     delta = 0;
-    //   }
-    // } else {
-    //   mixer.timeScale = -1;
-    //   if (roundedTime > keyFrames[keyFrameIndex]) {
-    //     delta = 0.04;
-    //   } else {
-    //     delta = 0;
-    //   }
-    // }
-    var delta = clock.getDelta();
+    if (goingForward) {
+      mixer.timeScale = 1;
+      if (roundedTime < keyFrames[keyFrameIndex]) {
+        delta = 0.02;
+      } else {
+        delta = 0;
+      }
+    } else {
+      mixer.timeScale = -1;
+      if (roundedTime > keyFrames[keyFrameIndex]) {
+        delta = 0.02;
+      } else {
+        delta = 0;
+      }
+    }
     mixer.update(delta);
   }
   renderer.render(worldScene, camera);
@@ -184,20 +197,22 @@ function scrollRatio() {
 let graphicSettingsIndex = 3;
 
 const graphicSettings = [
-  { shadowMap: false, mapSize: 16, fog: false, bias: -0.05 },
-  { shadowMap: false, mapSize: 16, fog: true, bias: -0.05 },
-  { shadowMap: true, mapSize: 16, fog: true, bias: -0.05 },
-  { shadowMap: true, mapSize: 32, fog: true, bias: -0.05 },
-  { shadowMap: true, mapSize: 64, fog: true, bias: -0.015 },
-  { shadowMap: true, mapSize: 128, fog: true, bias: -0.01 },
-  { shadowMap: true, mapSize: 256, fog: true, bias: -0.007 },
-  { shadowMap: true, mapSize: 512, fog: true, bias: -0.005 },
-  { shadowMap: true, mapSize: 1024, fog: true, bias: -0.003 },
+  { shadowMap: false, mapSize: 16, bias: -0.05 },
+  { shadowMap: true, mapSize: 16, bias: -0.05 },
+  { shadowMap: true, mapSize: 32, bias: -0.05 },
+  { shadowMap: true, mapSize: 64, bias: -0.015 },
+  { shadowMap: true, mapSize: 128, bias: -0.01 },
+  { shadowMap: true, mapSize: 256, bias: -0.007 },
+  { shadowMap: true, mapSize: 512, bias: -0.005 },
+  { shadowMap: true, mapSize: 1024, bias: -0.003 },
 ];
 
 function testLowerSettings(limit) {
   if (graphicSettingsIndex > limit) {
     graphicSettingsIndex--;
+    if (graphicSettingsIndex === 0) {
+      canGoHigher = false;
+    }
     resetGraphicSettings();
   }
 }
@@ -239,8 +254,6 @@ function onWindowResize() {
   setSizeCamera();
 }
 
-let newTime = 0;
-
 let keyFrameIndex = 0;
 const keyFrames = [0, 4.8, 8.5, 15, 20, 26, 32, 40, 46];
 
@@ -267,5 +280,5 @@ function scrolled() {
 }
 
 function mouseMoved(evt) {
-  camera.rotation.y += evt.movementX * 0.00002;
+  camera.rotation.y -= evt.movementX * 0.00002;
 }
