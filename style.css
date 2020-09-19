@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Cormorant";
+  src: url("fonts/cormorant/Cormorant-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Cormorant-italic";
+  src: url("fonts/cormorant/Cormorant-MediumItalic.otf") format("opentype");
+}
+
 html {
   font-size: calc(1vw + 1vh);
 }
@@ -10,7 +20,7 @@ html {
 
 body {
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: "Cormorant";
 }
 
 #context {
@@ -99,23 +109,27 @@ canvas {
   flex: 1;
   width: 100%;
   height: 100%;
-  padding: 0 10vw;
   justify-content: center;
   flex-flow: column wrap;
 }
 
+.slide-content p {
+  width: 35rem;
+  max-width: calc(100% - 3rem);
+  margin: 0 auto;
+}
+
 p,
 span {
-  font-family: sans-serif;
   font-size: 2rem;
 }
 
-h1 {
-  font-family: sans-serif;
-  font-size: 4rem;
+i {
+  font-family: "Cormorant-italic";
+  font-style: none;
 }
 
-.intro {
+.slide-content.intro-slide .intro {
   margin-bottom: 3rem;
 }
 
@@ -124,19 +138,21 @@ h1 {
 }
 
 .invite-story {
+  font-family: "Archivo";
   background: black;
   border-radius: 2rem;
   padding: 0.5rem 1rem;
   color: white;
   margin: 0 auto;
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 
 .invite-scroll {
+  font-family: "Archivo";
   padding: 1rem;
   color: grey;
   margin: 0 auto;
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 
 #index-slide {
@@ -149,7 +165,7 @@ h1 {
   flex-flow: column;
   justify-content: space-between;
   pointer-events: none;
-  transition: 0.5s;
+  transition: background 2s 0.5s;
   background: rgba(255, 255, 255, 1);
 }
 
@@ -158,18 +174,19 @@ h1 {
 }
 
 #index-slide h1 {
-  font-family: sans-serif;
   text-align: center;
+  font-family: "Archivo";
   font-size: 4rem;
   margin-top: 0;
   transition: 2.5s;
 }
 
 #loader {
-  color: black;
+  font-size: 1.5rem;
+  color: grey;
   text-align: center;
   margin: 0;
-  transition: 0.5s;
+  transition: 1s;
 }
 
 #index-slide[state="loaded"] {
