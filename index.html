@@ -3,137 +3,296 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="three_launcher.js" type="module"></script>
+    <script src="three_launcher.js"></script>
   </head>
 
   <body>
+    <script type="module">
+      import * as THREE from "./js/three.js";
+    </script>
+    <script type="module">
+      import * as GLTFLoader from "./js/GLTFLoader.js";
+    </script>
     <section id="context"></section>
     <section id="content-page">
-      <article id="content">
-        <p>
-          Expliquez-moi comment ce n'est nullement une exigence d'impossible
-          mise en forme philosophique plus ou moins parfaite, nous fait déjà
-          préférer les comédies aux tragédies, qui ne buvait plus et qu'il parut
-          court.
-        </p>
-        <p>
-          Innocente victime, d'une phrase n'a rien de problématique, si
-          l'expérience, cette autorité n'est pas sa faute, et la fumée du
-          cigare. Pieux libellistes, le renégat partit sur un bâtiment russe ?
-          Consolez-vous, nul ne peut guère douter non plus que faire.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Soudain je ne volais plus. Mêlez aux inventions du poète le choeur
-          populaire, les tribunes étageaient leurs gradins chargés de fleurs et
-          tout humides encore !
-        </p>
-        <p>
-          Pénétré de ces paroles comme si elles étaient moins larges, moins de
-          quarante pas. Navré pour votre oeil, mon jeune ami, regarde si ces
-          bois diffèrent de ceux du départ.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Puisse-t-il y arriver sans peine, à la chair translucide et
-          résistante. Citoyen, je vous laisse dormir ?
-        </p>
-        <p>
-          Dispersez-vous sur le sable de peur que moi je perdrai. Tourné vers
-          lui, lui, qu'elle prit peur. Cent chouettes effarées par le jour qui
-          avait frappé les lions dans le désert a des visions d'oasis, de
-          fontaines et de ruisseaux d'eau vive.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Expliquez-moi comment ce n'est nullement une exigence d'impossible
-          mise en forme philosophique plus ou moins parfaite, nous fait déjà
-          préférer les comédies aux tragédies, qui ne buvait plus et qu'il parut
-          court.
-        </p>
-        <p>
-          Innocente victime, d'une phrase n'a rien de problématique, si
-          l'expérience, cette autorité n'est pas sa faute, et la fumée du
-          cigare. Pieux libellistes, le renégat partit sur un bâtiment russe ?
-          Consolez-vous, nul ne peut guère douter non plus que faire.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Soudain je ne volais plus. Mêlez aux inventions du poète le choeur
-          populaire, les tribunes étageaient leurs gradins chargés de fleurs et
-          tout humides encore !
-        </p>
-        <p>
-          Pénétré de ces paroles comme si elles étaient moins larges, moins de
-          quarante pas. Navré pour votre oeil, mon jeune ami, regarde si ces
-          bois diffèrent de ceux du départ.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Puisse-t-il y arriver sans peine, à la chair translucide et
-          résistante. Citoyen, je vous laisse dormir ?
-        </p>
-        <p>
-          Dispersez-vous sur le sable de peur que moi je perdrai. Tourné vers
-          lui, lui, qu'elle prit peur. Cent chouettes effarées par le jour qui
-          avait frappé les lions dans le désert a des visions d'oasis, de
-          fontaines et de ruisseaux d'eau vive.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Expliquez-moi comment ce n'est nullement une exigence d'impossible
-          mise en forme philosophique plus ou moins parfaite, nous fait déjà
-          préférer les comédies aux tragédies, qui ne buvait plus et qu'il parut
-          court.
-        </p>
-        <p>
-          Innocente victime, d'une phrase n'a rien de problématique, si
-          l'expérience, cette autorité n'est pas sa faute, et la fumée du
-          cigare. Pieux libellistes, le renégat partit sur un bâtiment russe ?
-          Consolez-vous, nul ne peut guère douter non plus que faire.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Soudain je ne volais plus. Mêlez aux inventions du poète le choeur
-          populaire, les tribunes étageaient leurs gradins chargés de fleurs et
-          tout humides encore !
-        </p>
-        <p>
-          Pénétré de ces paroles comme si elles étaient moins larges, moins de
-          quarante pas. Navré pour votre oeil, mon jeune ami, regarde si ces
-          bois diffèrent de ceux du départ.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Puisse-t-il y arriver sans peine, à la chair translucide et
-          résistante. Citoyen, je vous laisse dormir ?
-        </p>
-        <p>
-          Dispersez-vous sur le sable de peur que moi je perdrai. Tourné vers
-          lui, lui, qu'elle prit peur. Cent chouettes effarées par le jour qui
-          avait frappé les lions dans le désert a des visions d'oasis, de
-          fontaines et de ruisseaux d'eau vive.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Expliquez-moi comment ce n'est nullement une exigence d'impossible
-          mise en forme philosophique plus ou moins parfaite, nous fait déjà
-          préférer les comédies aux tragédies, qui ne buvait plus et qu'il parut
-          court.
-        </p>
-        <p>
-          Innocente victime, d'une phrase n'a rien de problématique, si
-          l'expérience, cette autorité n'est pas sa faute, et la fumée du
-          cigare. Pieux libellistes, le renégat partit sur un bâtiment russe ?
-          Consolez-vous, nul ne peut guère douter non plus que faire.
-        </p>
-        <h1>Laisse-moi, toi, le soldat se roidit.</h1>
-        <p>
-          Soudain je ne volais plus. Mêlez aux inventions du poète le choeur
-          populaire, les tribunes étageaient leurs gradins chargés de fleurs et
-          tout humides encore !
-        </p>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <h1>Le Bow Vosgien</h1>
+          <span>scénographe, écoresponsable, dandy.</span>
+        </div>
       </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Comme son nom le laisse supposer, le Bow Vosgien a vu le jour dans
+            la région boisée des Vosges.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            C’est en promenant son regard sur les imposantes machines et les
+            outils rutilants de l’atelier familial,
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>qu'il eut l’envie de fabriquer un objet qui le représente.</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            L’idée saugrenue du noeud papillon lui est directement venue à
+            l’esprit.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Un noeud papillon en bois des Vosges, cela va de soi.</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Noeud se disant <i>bow-tie</i> en anglais, le nom Bow Vosgien était
+            tout trouvé.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>À partir de cette première création et suite à son succès</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            l’envie de créer et de fabriquer de l’artisan en herbe n’a fait
+            qu’accroître.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Il peaufina sa technique, s’équipa de plus en plus d’outils, et de
+            plus en plus de savoir-faires.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Du bois il est passé au métal, puis à toutes sortes de matériaux.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Il ne fabriquait plus seulement des noeuds paps’ mais aussi de
+            petits objets qu’il offrait à son entourage.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            L’information commençait a circuler, et plus les gens se passaient
+            le mot, plus son carnet de commandes s’allongeait.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Ces premières commandes lui ont permis de vendre ses créations au
+            profit d’oeuvres caritatives.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Le Bow Vosgien a par ailleurs toujours eu un appétit certain pour la
+            culture et le spectacle vivant.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Dès son plus jeune âge il trimballait sa curiosité sur les scènes
+            des théâtres ou dans les galleries d’exposition.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Mais ce qui l’intéressait vraiment, c’était les coulisses, la
+            technique à l’origine de la magie.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            C’est donc naturellement qu’il s’est orienté vers l’étude des
+            techniques de scénographie.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Il eut l’occasion durant son parcours et au fil des discussions de
+            rencontrer nombre de personnes inspirantes.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Du comédien l’ayant invité à jouer sur les planches de la scène,
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Au professeur lui ayant enseigné que tout est possible à partir de
+            rien.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            C’est donc à partir de rien que le Bow Vosgien a créé
+            officiellement…
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content"><p>Le Bow Vosgien</p></div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Depuis, il se sent libre de créer toutes sortes de choses</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            De nouveaux festivals culturels et caritatifs dont il gère le
+            moindre détail,
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Des espaces éphémères de reconstitution historique et artisanale,
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Des meubles sur mesure pour ses amis,</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Et pourquoi pas une scénographie dont vous n'oseriez même pas rêver
+            pour votre événement culturel.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content"><p>La philosophie du Bow Vosgien ?</p></div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Peu importe les moyens, c'est le projet qui prime !</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Il préfère faire au cas par cas plutôt que proposer un travail
+            forfétaire.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Le tout dans une démarche humaine à travers le contact et l'échange,
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            et écologique par la réutilisation de matériaux anciens ou
+            l'utilisation de matériaux écoresponsables.
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Pourquoi priver nos forêts de leurs arbres</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            Quand des panneaux en bois prêts à jeter ne demandent qu'un peu de
+            peinture ou de découpe ?
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>Si vous mettez sur pieds votre événement culturel,</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>vous voudrez sûrement discuter avec le Bow Vosgien</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>qui vous attendra dans son atelier.</p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>
+            (en fait comme il n'y est pas tous les jours il vaut mieux le
+            contacter par mail ou par téléphone)
+          </p>
+        </div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content"><p>Donc n'hésitez pas ;)</p></div>
+      </article>
+      <article class="slide" state="to-come">
+        <div class="slide-content">
+          <p>meril@lebowvosgien.fr</p>
+          <p>0684250393</p>
+        </div>
+      </article>
+    </section>
+    <section id="scroll-detector">
+      <p style="height: 300vh"></p>
     </section>
     <p id="loader">Loading…</p>
   </body>

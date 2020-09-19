@@ -1,6 +1,3 @@
-import * as THREE from "./build/three.module.js";
-import { GLTFLoader } from "./loaders/GLTFLoader.js";
-
 window.addEventListener("load", setup);
 window.addEventListener("resize", onWindowResize, false);
 
@@ -10,9 +7,7 @@ let camera = null;
 let clock = null;
 let mixer = null;
 let gltf = null;
-let content = null,
-  contentPage = null,
-  contentHeight = 0;
+let contentPage = null;
 let animLength = null;
 let previousScroll = 0;
 let mesh = null;
@@ -29,10 +24,11 @@ function setup() {
   } else {
     graphicSettingsIndex = 4;
   }
-  document.getElementById("content-page").addEventListener("scroll", scrolled);
-  content = document.getElementById("content");
+  document
+    .getElementById("scroll-detector")
+    .addEventListener("scroll", scrolled);
   contentPage = document.getElementById("content-page");
-  getContentHeight();
+  updateSlide();
   loadModels();
 }
 
@@ -55,7 +51,7 @@ function loadModels() {
 }
 
 function loadGltfModel(model, onLoaded) {
-  let loader = new GLTFLoader();
+  let loader = new THREE.GLTFLoader();
   const modelName = "models/" + model.name;
   loader.load(
     modelName,
@@ -65,6 +61,7 @@ function loadGltfModel(model, onLoaded) {
       camera = gltf.cameras[0];
       camera.fov = 40;
       camera.far = 75;
+      camera.rotation.order = "XZY";
       model.scene = scene;
       gltf.scene.traverse(function (object) {
         if (object.isMesh) {
@@ -148,20 +145,18 @@ function render() {
   if (!mobileDevice) {
     countFps();
   }
-  contentPage.firstElementChild.firstElementChild.innerHTML =
-    graphicSettingsIndex + " / " + Math.round(fps) + " / " + mobileDevice;
   const roundedTime = Math.round(mixer.time * 10) / 10;
   if (mixer) {
     if (goingForward) {
       mixer.timeScale = 1;
-      if (roundedTime < keyFrames[keyFrameIndex]) {
+      if (roundedTime < keyFrames[currentKeyFrameIndex]) {
         delta = 0.02;
       } else {
         delta = 0;
       }
     } else {
       mixer.timeScale = -1;
-      if (roundedTime > keyFrames[keyFrameIndex]) {
+      if (roundedTime > keyFrames[currentKeyFrameIndex]) {
         delta = 0.02;
       } else {
         delta = 0;
@@ -178,14 +173,6 @@ function setSizeCamera() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function getContentHeight() {
-  contentHeight = content.offsetHeight - window.innerHeight;
-}
-
-function scrollRatio() {
-  return contentPage.scrollTop / contentHeight;
 }
 
 let graphicSettingsIndex;
@@ -237,6 +224,72 @@ function resetGraphicSettings(elemToTest) {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function updateSlide() {
+  if (
+    previousKeyFrameIndex !== currentKeyFrameIndex &&
+    contentPage.children[currentKeyFrameIndex]
+  ) {
+    if (goingForward) {
+      if (contentPage.children[currentKeyFrameIndex - 1]) {
+        contentPage.children[currentKeyFrameIndex - 1].setAttribute(
+          "state",
+          "passed"
+        );
+      }
+    } else {
+      if (contentPage.children[currentKeyFrameIndex + 1]) {
+        contentPage.children[currentKeyFrameIndex + 1].setAttribute(
+          "state",
+          "to-come"
+        );
+      }
+    }
+    contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
+    previousKeyFrameIndex = currentKeyFrameIndex;
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function onWindowResize() {
+  scrolled();
+  setSizeCamera();
+}
+
+let previousKeyFrameIndex = "";
+let currentKeyFrameIndex = 0;
+const keyFrames = [0, 4.8, 8.5, 15, 20, 26, 32, 40, 46];
+
+function scrolled(event) {
+  const roundedTime = Math.round(mixer.time * 10) / 10;
+  if (previousScroll < this.scrollTop) {
+    if (
+      roundedTime < keyFrames[currentKeyFrameIndex + 1] &&
+      roundedTime >= keyFrames[currentKeyFrameIndex]
+    ) {
+      currentKeyFrameIndex++;
+      goingForward = true;
+    }
+  } else if (previousScroll > this.scrollTop) {
+    if (
+      roundedTime <= keyFrames[currentKeyFrameIndex] &&
+      roundedTime > keyFrames[currentKeyFrameIndex - 1]
+    ) {
+      currentKeyFrameIndex--;
+      goingForward = false;
+    }
+  }
+  this.scrollTop = window.innerHeight;
+  previousScroll = this.scrollTop;
+  updateSlide();
+}
+
+function mouseMoved(evt) {
+  camera.rotation.y -= evt.movementX * 0.00002;
+}
+
 function mobileAndTabletCheck() {
   let check = false;
   (function (a) {
@@ -251,41 +304,4 @@ function mobileAndTabletCheck() {
       check = true;
   })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function onWindowResize() {
-  getContentHeight();
-  scrolled();
-  setSizeCamera();
-}
-
-let keyFrameIndex = 0;
-const keyFrames = [0, 4.8, 8.5, 15, 20, 26, 32, 40, 46];
-
-function scrolled() {
-  const roundedTime = Math.round(mixer.time * 10) / 10;
-  if (previousScroll < this.scrollTop) {
-    if (
-      roundedTime < keyFrames[keyFrameIndex + 1] &&
-      roundedTime >= keyFrames[keyFrameIndex]
-    ) {
-      keyFrameIndex++;
-      goingForward = true;
-    }
-  } else if (previousScroll > this.scrollTop) {
-    if (
-      roundedTime <= keyFrames[keyFrameIndex] &&
-      roundedTime > keyFrames[keyFrameIndex - 1]
-    ) {
-      keyFrameIndex--;
-      goingForward = false;
-    }
-  }
-  previousScroll = this.scrollTop;
-}
-
-function mouseMoved(evt) {
-  camera.rotation.y -= evt.movementX * 0.00002;
 }
