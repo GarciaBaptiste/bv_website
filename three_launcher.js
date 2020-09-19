@@ -38,11 +38,7 @@ function loadModels() {
     loadGltfModel(m, function () {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
-        document.getElementById("loader").className = "hidden";
-        window.setTimeout(
-          () => (document.getElementById("loader").style.display = "none"),
-          500
-        );
+        document.getElementById("index-slide").setAttribute("state", "loaded");
         initRenderer();
         initScene();
       }
@@ -77,7 +73,7 @@ function loadGltfModel(model, onLoaded) {
     },
     function (xhr) {
       document.getElementById("loader").innerText =
-        "Loading model " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
+        "Chargement " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
     }
   );
 }

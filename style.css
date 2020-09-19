@@ -22,27 +22,6 @@ body {
   background: white;
 }
 
-#loader {
-  color: black;
-  line-height: 100vh;
-  text-align: center;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  margin: 0;
-  background: white;
-  transition: color 0.3s, background 0.5s 0.3s;
-}
-
-#loader.hidden {
-  color: transparent;
-  background: transparent;
-  pointer-events: none;
-}
-
 canvas {
   position: fixed;
   top: 0;
@@ -71,28 +50,48 @@ canvas {
 .slide {
   width: 100vw;
   height: 100vh;
+  top: 0;
   left: 0;
   position: fixed;
   vertical-align: middle;
   text-align: center;
 }
 
-.slide[state="to-come"] {
+.slide.swipe[state="to-come"] {
   top: 100vh;
   opacity: 0;
   transition: top 4s 0.5s, opacity 2s 0s;
 }
 
-.slide[state="current"] {
+.slide.swipe[state="current"] {
   top: 0;
   opacity: 1;
   transition: top 4s, opacity 2s 2.5s;
 }
 
-.slide[state="passed"] {
+.slide.swipe[state="passed"] {
   top: -100vh;
   opacity: 0;
   transition: top 4s 0.5s, opacity 2s 0s;
+}
+
+.slide.zoom[state="to-come"] {
+  transition: transform 4s 0.5s, background 4s 0.5s, top 4s 0.5s;
+  transform: scale(1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.slide.zoom[state="current"] {
+  transition: transform 4s 0.5s, background 4s 0.5s, top 4s 0.5s;
+  transform: scale(1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.slide.zoom[state="passed"] {
+  transition: transform 4s 0.5s, background 4s 0.5s, top 4s 0.5s;
+  transform: scale(0.25);
+  background: rgba(255, 255, 255, 0);
+  top: calc(-50vh + 1rem);
 }
 
 .slide-content {
@@ -102,7 +101,7 @@ canvas {
   height: 100%;
   padding: 0 10vw;
   justify-content: center;
-  flex-direction: column;
+  flex-flow: column wrap;
 }
 
 p,
@@ -114,4 +113,74 @@ span {
 h1 {
   font-family: sans-serif;
   font-size: 4rem;
+}
+
+.intro {
+  margin-bottom: 3rem;
+}
+
+.slide-content.intro-slide {
+  justify-content: space-between;
+}
+
+.invite-story {
+  background: black;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+.invite-scroll {
+  padding: 1rem;
+  color: grey;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+#index-slide {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  pointer-events: none;
+  transition: 0.5s;
+  background: rgba(255, 255, 255, 1);
+}
+
+#index-slide * {
+  flex: 1;
+}
+
+#index-slide h1 {
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 4rem;
+  margin-top: 0;
+  transition: 2.5s;
+}
+
+#loader {
+  color: black;
+  text-align: center;
+  margin: 0;
+  transition: 0.5s;
+}
+
+#index-slide[state="loaded"] {
+  background: rgba(255, 255, 255, 0);
+}
+
+#index-slide[state="loaded"] h1 {
+  font-size: 1rem;
+  margin-top: -30vh;
+}
+
+#index-slide[state="loaded"] #loader {
+  opacity: 0;
 }
