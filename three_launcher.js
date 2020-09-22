@@ -13,7 +13,8 @@ let previousScroll = 0;
 let mesh = null;
 let mobileDevice;
 
-let MODELS = [{ name: "test_camera_anim2.glb" }];
+let MODELS = [{ name: "test2.glb" }];
+// let MODELS = [{ name: "scene_lbv_1.glb" }];
 
 let numLoadedModels = 0;
 
@@ -85,9 +86,10 @@ function initRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 }
+
+let directionalLight;
 
 function initScene() {
   window.addEventListener("mousemove", mouseMoved);
@@ -97,10 +99,22 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 2, 70);
+  worldScene.fog = new THREE.Fog(0xffffff, 2, 50);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.5);
+  const hlight = new THREE.AmbientLight(0xffffff, 0.6);
   worldScene.add(hlight);
+
+  directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
+  directionalLight.position.set(100, 10, 150);
+  directionalLight.target.position.set(0, 0, 0);
+  directionalLight.castShadow = true;
+  const d = 100;
+  directionalLight.shadow.camera.left = -d;
+  directionalLight.shadow.camera.right = d;
+  directionalLight.shadow.camera.top = d;
+  directionalLight.shadow.camera.bottom = -d;
+  resetGraphicSettings(directionalLight);
+  worldScene.add(directionalLight);
 
   mesh = MODELS[0].scene;
   worldScene.add(mesh);
@@ -114,7 +128,7 @@ function initScene() {
       } else if (fps > 58) {
         testHigherSettings();
       }
-    }, 3000);
+    }, 500);
   }
   animate();
 }
@@ -174,14 +188,28 @@ function setSizeCamera() {
 let graphicSettingsIndex;
 
 const graphicSettings = [
-  { shadowMap: false, mapSize: 16, bias: -0.05 },
+  {
+    shadowMap: false,
+    mapSize: 16,
+    bias: -0.05,
+  },
   { shadowMap: true, mapSize: 16, bias: -0.05 },
   { shadowMap: true, mapSize: 32, bias: -0.05 },
-  { shadowMap: true, mapSize: 64, bias: -0.015 },
-  { shadowMap: true, mapSize: 128, bias: -0.01 },
-  { shadowMap: true, mapSize: 256, bias: -0.007 },
-  { shadowMap: true, mapSize: 512, bias: -0.005 },
-  { shadowMap: true, mapSize: 1024, bias: -0.003 },
+  {
+    shadowMap: true,
+    mapSize: 64,
+    bias: -0.015,
+  },
+  {
+    shadowMap: true,
+    mapSize: 128,
+    bias: -0.005,
+  },
+  {
+    shadowMap: true,
+    mapSize: 256,
+    bias: -0.003,
+  },
 ];
 
 function testLowerSettings() {
@@ -189,6 +217,7 @@ function testLowerSettings() {
     graphicSettingsIndex--;
     for (let i = 0; i < mesh.children.length; i++) {
       resetGraphicSettings(mesh.children[i]);
+      resetGraphicSettings(directionalLight);
     }
   }
 }
@@ -198,6 +227,7 @@ function testHigherSettings() {
     graphicSettingsIndex++;
     for (let i = 0; i < mesh.children.length; i++) {
       resetGraphicSettings(mesh.children[i]);
+      resetGraphicSettings(directionalLight);
     }
   }
 }
@@ -209,6 +239,17 @@ function resetGraphicSettings(elemToTest) {
       graphicSettings[graphicSettingsIndex].mapSize;
     elemToTest.shadow.mapSize.height =
       graphicSettings[graphicSettingsIndex].mapSize;
+    elemToTest.shadow.bias = graphicSettings[graphicSettingsIndex].bias;
+    if (elemToTest.shadow.map !== null) {
+      elemToTest.shadow.map.dispose();
+      elemToTest.shadow.map = null;
+    }
+  } else if (elemToTest.type === "DirectionalLight") {
+    elemToTest.castShadow = graphicSettings[graphicSettingsIndex].shadowMap;
+    elemToTest.shadow.mapSize.width =
+      graphicSettings[graphicSettingsIndex].mapSize * 8;
+    elemToTest.shadow.mapSize.height =
+      graphicSettings[graphicSettingsIndex].mapSize * 8;
     elemToTest.shadow.bias = graphicSettings[graphicSettingsIndex].bias;
     if (elemToTest.shadow.map !== null) {
       elemToTest.shadow.map.dispose();
@@ -256,7 +297,7 @@ function onWindowResize() {
 
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
-const keyFrames = [0, 4.8, 8.5, 15, 20, 26, 32, 40, 46];
+const keyFrames = [0, 5, 10, 15, 20, 25, 30, 35, 40];
 
 function scrolled(event) {
   const roundedTime = Math.round(mixer.time * 10) / 10;
