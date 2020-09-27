@@ -13,7 +13,7 @@ let previousScroll = 0;
 let mesh = null;
 let mobileDevice;
 
-let MODELS = [{ name: "test2.glb" }];
+let MODELS = [{ name: "culture_02.glb" }];
 // let MODELS = [{ name: "scene_lbv_1.glb" }];
 
 let numLoadedModels = 0;
@@ -65,8 +65,9 @@ function loadGltfModel(model, onLoaded) {
           object.matrixAutoUpdate = true;
         } else if (object.isLight) {
           object.shadow.camera.near = 0.1;
-          object.shadow.camera.far = 50;
+          object.shadow.camera.far = 30;
           object.matrixAutoUpdate = true;
+          object.intensity = object.intensity / 1000;
         }
         resetGraphicSettings(object);
       });
@@ -99,22 +100,22 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 2, 50);
+  worldScene.fog = new THREE.Fog(0xffffff, 2, 25);
 
   const hlight = new THREE.AmbientLight(0xffffff, 0.6);
   worldScene.add(hlight);
 
-  directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
-  directionalLight.position.set(100, 10, 150);
-  directionalLight.target.position.set(0, 0, 0);
-  directionalLight.castShadow = true;
-  const d = 100;
-  directionalLight.shadow.camera.left = -d;
-  directionalLight.shadow.camera.right = d;
-  directionalLight.shadow.camera.top = d;
-  directionalLight.shadow.camera.bottom = -d;
-  resetGraphicSettings(directionalLight);
-  worldScene.add(directionalLight);
+  // directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
+  // directionalLight.position.set(100, 10, 150);
+  // directionalLight.target.position.set(0, 0, 0);
+  // directionalLight.castShadow = true;
+  // const d = 100;
+  // directionalLight.shadow.camera.left = -d;
+  // directionalLight.shadow.camera.right = d;
+  // directionalLight.shadow.camera.top = d;
+  // directionalLight.shadow.camera.bottom = -d;
+  // resetGraphicSettings(directionalLight);
+  // worldScene.add(directionalLight);
 
   mesh = MODELS[0].scene;
   worldScene.add(mesh);
@@ -217,8 +218,8 @@ function testLowerSettings() {
     graphicSettingsIndex--;
     for (let i = 0; i < mesh.children.length; i++) {
       resetGraphicSettings(mesh.children[i]);
-      resetGraphicSettings(directionalLight);
     }
+    // resetGraphicSettings(directionalLight);
   }
 }
 
@@ -227,8 +228,8 @@ function testHigherSettings() {
     graphicSettingsIndex++;
     for (let i = 0; i < mesh.children.length; i++) {
       resetGraphicSettings(mesh.children[i]);
-      resetGraphicSettings(directionalLight);
     }
+    // resetGraphicSettings(directionalLight);
   }
 }
 
@@ -297,7 +298,7 @@ function onWindowResize() {
 
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
-const keyFrames = [0, 5, 10, 15, 20, 25, 30, 35, 40];
+const keyFrames = [0, 22];
 
 function scrolled(event) {
   const roundedTime = Math.round(mixer.time * 10) / 10;
