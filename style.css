@@ -7,7 +7,7 @@
   font-family: "Graphik";
   src: url("fonts/Graphik-400-Regular") format("opentype");
 }
-.navigation-bar {
+#navigation-bar {
   background-color: #fff;
   width: 60vw;
   height: 64px;
@@ -19,14 +19,14 @@
   position: fixed;
   overflow: hidden;
 }
-.navigation-bar[currentChapter="naissance"] > a.naissance,
-.navigation-bar[currentChapter="developpement"] > a.developpement,
-.navigation-bar[currentChapter="realisations"] > a.realisations,
-.navigation-bar[currentChapter="contact"] > a.contact {
+#navigation-bar[currentChapter="naissance"] > a.naissance,
+#navigation-bar[currentChapter="developpement"] > a.developpement,
+#navigation-bar[currentChapter="realisations"] > a.realisations,
+#navigation-bar[currentChapter="contact"] > a.contact {
   flex: 1;
 }
 
-.navigation-bar a {
+#navigation-bar a {
   float: left;
   flex: 0;
   display: inline-flex;
@@ -39,7 +39,7 @@
   transition: all 700ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.navigation-bar a:hover {
+#navigation-bar a:hover {
   background: #ddd;
   color: black;
 }

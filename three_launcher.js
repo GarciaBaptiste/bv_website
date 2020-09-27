@@ -11,6 +11,7 @@ let contentPage = null;
 let animLength = null;
 let previousScroll = 0;
 let mesh = null;
+let navigationBar;
 
 let MODELS = [{ name: "culture_02.glb" }];
 
@@ -21,6 +22,7 @@ function setup() {
     .getElementById("scroll-detector")
     .addEventListener("scroll", scrolled);
   contentPage = document.getElementById("content-page");
+  navigationBar = document.getElementById("navigation-bar");
   updateSlide();
   loadModels();
 }
@@ -175,6 +177,10 @@ function updateSlide() {
     }
     contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
     previousKeyFrameIndex = currentKeyFrameIndex;
+    navigationBar.setAttribute(
+      "currentChapter",
+      chapterNames[chapterIndexes[currentKeyFrameIndex]]
+    );
   }
 }
 
@@ -187,7 +193,9 @@ function onWindowResize() {
 
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
-const keyFrames = [0, 11, 22];
+const keyFrames = [0, 3, 6, 9, 12, 15, 18, 20, 22];
+const chapterIndexes = [0, 0, 1, 1, 1, 2, 2, 3, 3];
+const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
 function scrolled(event) {
   const roundedTime = Math.round(mixer.time * 10) / 10;
