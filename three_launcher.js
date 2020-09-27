@@ -156,31 +156,32 @@ function setSizeCamera() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function updateSlide() {
-  if (
-    previousKeyFrameIndex !== currentKeyFrameIndex &&
-    contentPage.children[currentKeyFrameIndex]
-  ) {
-    if (goingForward) {
-      if (contentPage.children[currentKeyFrameIndex - 1]) {
-        contentPage.children[currentKeyFrameIndex - 1].setAttribute(
-          "state",
-          "passed"
-        );
-      }
-    } else {
-      if (contentPage.children[currentKeyFrameIndex + 1]) {
-        contentPage.children[currentKeyFrameIndex + 1].setAttribute(
-          "state",
-          "to-come"
-        );
-      }
-    }
-    contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
-    previousKeyFrameIndex = currentKeyFrameIndex;
-    navigationBar.setAttribute(
-      "currentChapter",
-      chapterNames[chapterIndexes[currentKeyFrameIndex]]
-    );
+  for (let i = 0; i < currentKeyFrameIndex; i++) {
+    console.log(i, " passed");
+    contentPage.children[i].setAttribute("state", "passed");
+  }
+  for (let j = currentKeyFrameIndex + 1; j < keyFrames.length; j++) {
+    console.log(j, " to come");
+    contentPage.children[j].setAttribute("state", "to-come");
+  }
+  contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
+  console.log(currentKeyFrameIndex, " current");
+  previousKeyFrameIndex = currentKeyFrameIndex;
+  navigationBar.setAttribute(
+    "currentChapter",
+    chapterNames[chapterIndexes[currentKeyFrameIndex]]
+  );
+}
+
+function changeChapter(newFrameIndex) {
+  if (currentKeyFrameIndex < newFrameIndex) {
+    goingForward = true;
+    currentKeyFrameIndex = newFrameIndex;
+    updateSlide();
+  } else if (currentKeyFrameIndex > newFrameIndex) {
+    goingForward = false;
+    currentKeyFrameIndex = newFrameIndex;
+    updateSlide();
   }
 }
 
@@ -193,8 +194,8 @@ function onWindowResize() {
 
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
-const keyFrames = [0, 3, 6, 9, 12, 15, 18, 20, 22];
-const chapterIndexes = [0, 0, 1, 1, 1, 2, 2, 3, 3];
+const keyFrames = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];
+const chapterIndexes = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
 const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
 function scrolled(event) {
