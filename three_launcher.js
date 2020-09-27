@@ -67,7 +67,7 @@ function loadGltfModel(model, onLoaded) {
           object.shadow.camera.near = 0.1;
           object.shadow.camera.far = 30;
           object.matrixAutoUpdate = true;
-          object.intensity = object.intensity / 1000;
+          object.intensity = object.intensity / 2000;
         }
         resetGraphicSettings(object);
       });
@@ -86,7 +86,7 @@ function initRenderer() {
   renderer.setPixelRatio(1);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.shadowMap.enabled = true;
+  // renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 }
 
