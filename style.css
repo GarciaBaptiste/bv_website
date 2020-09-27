@@ -13,7 +13,7 @@
   height: 64px;
   left: 20vw;
   bottom: 50px;
-  padding: 0 50px;
+  padding: 0 20px;
   border-radius: 100px;
   display: flex;
   position: fixed;
@@ -23,20 +23,22 @@
 #navigation-bar[currentChapter="developpement"] > a.developpement,
 #navigation-bar[currentChapter="realisations"] > a.realisations,
 #navigation-bar[currentChapter="contact"] > a.contact {
-  flex: 1;
+  /*        flex: 1;*/
+  margin: 0 60px;
+  color: rgba(0, 0, 0, 1);
 }
 
 #navigation-bar a {
   float: left;
-  flex: 0;
+  flex: 0.1;
   display: inline-flex;
-  color: #000;
+  color: rgba(0, 0, 0, 0.3);
   text-align: center;
-  padding: 21px 40px;
+  justify-content: center;
+  padding: 24px 3%;
   text-decoration: none;
   font-size: 17px;
-  justify-content: space-around;
-  transition: all 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 1400ms cubic-bezier(0.32, 0.02, 0.3, 1);
 }
 
 #navigation-bar a:hover {
@@ -57,8 +59,11 @@
 .navigation-dot-blue {
   background-color: #2873e4;
 }
-.navigation-dot-blue {
-  background-color: #2873e4;
+.navigation-dot-purple {
+  background-color: #c981e2;
+}
+.navigation-dot-orange {
+  background-color: #ffa800;
 }
 
 .logo-container {
@@ -73,7 +78,9 @@
   -o-transition: all 1400ms cubic-bezier(0.16, 1, 0.3, 1) 2s;
   transition: all 1400ms cubic-bezier(0.16, 1, 0.3, 1) 2s;
 }
-
+.logo-svg img {
+  width: 140px;
+}
 .invite-scroll-container {
   width: 100%;
   bottom: 0px;
@@ -90,7 +97,7 @@
 .icon-mouse-scroll-animation {
   width: 8px;
   padding: 4px 4px;
-  height: 20px;
+  height: 21px;
   border: 2px solid #000;
   border-radius: 25px;
   opacity: 0.75;
@@ -149,7 +156,7 @@ h3 {
 }
 h4 {
   font-family: "Benne";
-  font-size: 24px;
+  font-size: calc(1vw + 8px);
   font-weight: 100;
 }
 h5 {
