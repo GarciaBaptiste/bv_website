@@ -9,15 +9,16 @@
 }
 #navigation-bar {
   background-color: #fff;
-  width: 60vw;
+  width: 765px;
   height: 64px;
-  left: 20vw;
+  left: 50%;
+  margin-left: -382px;
   bottom: 50px;
   padding: 0 20px;
   border-radius: 100px;
   display: flex;
+  align-content: center;
   position: fixed;
-  overflow: hidden;
 }
 #navigation-bar[currentChapter="naissance"] > a.naissance,
 #navigation-bar[currentChapter="developpement"] > a.developpement,
@@ -27,7 +28,10 @@
   margin: 0 60px;
   color: rgba(0, 0, 0, 1);
 }
-
+#links-wrapper {
+  width: 100%;
+  align-items: center;
+}
 #navigation-bar a {
   float: left;
   flex: 0.1;
@@ -38,11 +42,10 @@
   padding: 24px 3%;
   text-decoration: none;
   font-size: 17px;
-  transition: all 1400ms cubic-bezier(0.32, 0.02, 0.3, 1);
+  transition: all 700ms cubic-bezier(0.32, 0.02, 0.3, 1);
 }
 
 #navigation-bar a:hover {
-  background: #ddd;
   color: black;
 }
 .navigation-dot {
@@ -64,6 +67,21 @@
 }
 .navigation-dot-orange {
   background-color: #ffa800;
+}
+.naissance {
+  transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.naissance:hover {
+  color: #43eb99 !important;
+}
+.developpement:hover {
+  color: #2873e4 !important;
+}
+.realisations:hover {
+  color: #c981e2 !important;
+}
+.contact:hover {
+  color: #ffa800 !important;
 }
 
 .logo-container {
@@ -156,7 +174,7 @@ h3 {
 }
 h4 {
   font-family: "Benne";
-  font-size: calc(1vw + 8px);
+  font-size: 20px;
   font-weight: 100;
 }
 h5 {
