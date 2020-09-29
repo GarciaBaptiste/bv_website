@@ -13,7 +13,7 @@ let previousScroll = 0;
 let mesh = null;
 let navigationBar;
 
-let MODELS = [{ name: "culture_02.glb" }];
+let MODELS = [{ name: "scenelbv_final_04.glb" }];
 
 let numLoadedModels = 0;
 
@@ -51,7 +51,7 @@ function loadGltfModel(model, onLoaded) {
       let scene = gltf.scene;
       camera = gltf.cameras[0];
       camera.fov = 40;
-      camera.far = 75;
+      camera.far = 30;
       camera.rotation.order = "XZY";
       model.scene = scene;
       gltf.scene.traverse(function (object) {
@@ -64,6 +64,9 @@ function loadGltfModel(model, onLoaded) {
     function (xhr) {
       document.getElementById("loader").innerText =
         "Chargement " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
+    },
+    function (error) {
+      console.log(error);
     }
   );
 }
@@ -89,7 +92,7 @@ function initScene() {
   worldScene.background = new THREE.Color(0xffffff);
   worldScene.fog = new THREE.Fog(0xffffff, 2, 25);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.6);
+  const hlight = new THREE.AmbientLight(0xffffff, 0.2);
   worldScene.add(hlight);
 
   // directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
@@ -122,18 +125,20 @@ let delta = 0;
 
 let lastLoop = new Date();
 
+let scaleAmount = 1;
+
 function render() {
   const roundedTime = Math.round(mixer.time * 10) / 10;
   if (mixer) {
     if (goingForward) {
-      mixer.timeScale = 1;
+      mixer.timeScale = scaleAmount;
       if (roundedTime < keyFrames[currentKeyFrameIndex]) {
         delta = 0.02;
       } else {
         delta = 0;
       }
     } else {
-      mixer.timeScale = -1;
+      mixer.timeScale = -scaleAmount;
       if (roundedTime > keyFrames[currentKeyFrameIndex]) {
         delta = 0.02;
       } else {
@@ -157,15 +162,12 @@ function setSizeCamera() {
 
 function updateSlide() {
   for (let i = 0; i < currentKeyFrameIndex; i++) {
-    console.log(i, " passed");
     contentPage.children[i].setAttribute("state", "passed");
   }
   for (let j = currentKeyFrameIndex + 1; j < keyFrames.length; j++) {
-    console.log(j, " to come");
     contentPage.children[j].setAttribute("state", "to-come");
   }
   contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
-  console.log(currentKeyFrameIndex, " current");
   previousKeyFrameIndex = currentKeyFrameIndex;
   navigationBar.setAttribute(
     "currentChapter",
@@ -174,6 +176,7 @@ function updateSlide() {
 }
 
 function changeChapter(newFrameIndex) {
+  scaleAmount = 10;
   if (currentKeyFrameIndex < newFrameIndex) {
     goingForward = true;
     currentKeyFrameIndex = newFrameIndex;
@@ -194,11 +197,29 @@ function onWindowResize() {
 
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
-const keyFrames = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];
+const keyFrames = [
+  0,
+  6,
+  12,
+  18,
+  24,
+  30,
+  36,
+  42,
+  48,
+  54,
+  60,
+  66,
+  72,
+  78,
+  83,
+  88,
+];
 const chapterIndexes = [null, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
 const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
 function scrolled(event) {
+  scaleAmount = 1;
   const roundedTime = Math.round(mixer.time * 10) / 10;
   if (previousScroll < this.scrollTop) {
     if (
