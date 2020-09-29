@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400&display=swap"
@@ -179,23 +180,55 @@
       </div>
       <p id="loader">Chargement…</p>
     </section>
-    <div id="navigation-bar">
-      <a class="naissance" href="#naissance" onClick="changeChapter(1)">
-        <span class="navigation-dot navigation-dot-green"></span>
-        <h4>Naissance</h4>
-      </a>
-      <a class="developpement" href="#developpement" onClick="changeChapter(5)">
-        <span class="navigation-dot navigation-dot-blue"></span>
-        <h4>Développement</h4>
-      </a>
-      <a class="realisations" href="#realisations" onClick="changeChapter(9)">
-        <span class="navigation-dot navigation-dot-purple"></span>
-        <h4>Réalisations</h4></a
-      >
-      <a class="contact" href="#contact" onClick="changeChapter(13)">
-        <span class="navigation-dot navigation-dot-orange"></span>
-        <h4>Contact</h4>
-      </a>
+    <div id="navigation-wrapper">
+      <div id="navigation-bar" class="navigation-bar-visible">
+        <a class="naissance" href="#naissance" onClick="changeChapter(0)">
+          <span class="navigation-dot navigation-dot-green"></span>
+          <h4>Naissance</h4>
+        </a>
+        <a
+          class="developpement"
+          href="#developpement"
+          onClick="changeChapter(5)"
+        >
+          <span class="navigation-dot navigation-dot-blue"></span>
+          <h4>Développement</h4>
+        </a>
+        <a class="realisations" href="#realisations" onClick="changeChapter(9)">
+          <span class="navigation-dot navigation-dot-purple"></span>
+          <h4>Réalisations</h4></a
+        >
+        <a class="contact" href="#contact" onClick="changeChapter(13)">
+          <span class="navigation-dot navigation-dot-orange"></span>
+          <h4>Contact</h4>
+        </a>
+        <button id="burger-icon" onclick="toggleMenu()">
+          <svg
+            class="close-burger burger-icon-visible"
+            width="16"
+            height="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.142 0l1.414 1.414-6.364 6.364 6.364 6.364-1.414 1.414-6.364-6.364-6.364 6.364L0 14.142l6.364-6.364L0 1.414 1.414 0l6.364 6.364L14.142 0z"
+              fill="#000"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <svg
+            class="open-burger"
+            width="20"
+            height="12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 10v2H0v-2h20zm0-5v2H0V5h20zm0-5v2H0V0h20z"
+              fill="#000"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
   </body>
 </html>
