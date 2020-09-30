@@ -13,7 +13,7 @@ let previousScroll = 0;
 let mesh = null;
 let navigationBar;
 
-let MODELS = [{ name: "scenelbv_final_04.glb" }];
+let MODELS = [{ name: "scene_finale3.glb" }];
 
 let numLoadedModels = 0;
 
@@ -50,7 +50,7 @@ function loadGltfModel(model, onLoaded) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
-      camera.fov = 40;
+      camera.fov = 30;
       camera.far = 30;
       camera.rotation.order = "XZY";
       model.scene = scene;
@@ -90,9 +90,9 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 2, 25);
+  worldScene.fog = new THREE.Fog(0xffffff, 0, 25);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.2);
+  const hlight = new THREE.AmbientLight(0xffffff, 0.6);
   worldScene.add(hlight);
 
   // directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
@@ -125,7 +125,7 @@ let delta = 0;
 
 let lastLoop = new Date();
 
-let scaleAmount = 1;
+let scaleAmount = 0.7;
 
 function render() {
   const roundedTime = Math.round(mixer.time * 10) / 10;
@@ -199,27 +199,27 @@ let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
 const keyFrames = [
   0,
-  6,
-  12,
-  18,
-  24,
-  30,
-  36,
-  42,
-  48,
-  54,
-  60,
-  66,
-  72,
-  78,
-  83,
-  88,
+  4.5,
+  8.5,
+  12.4,
+  17,
+  22,
+  26.5,
+  31.9,
+  37.1,
+  41.9,
+  46.7,
+  52.1,
+  56.7,
+  61.9,
+  65.3,
+  68.5,
 ];
 const chapterIndexes = [null, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
 const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
 function scrolled(event) {
-  scaleAmount = 1;
+  scaleAmount = 0.7;
   const roundedTime = Math.round(mixer.time * 10) / 10;
   if (previousScroll < this.scrollTop) {
     if (
