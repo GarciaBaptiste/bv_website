@@ -13,7 +13,7 @@ let previousScroll = 0;
 let mesh = null;
 let navigationBar;
 
-let MODELS = [{ name: "scene_finale3.glb" }];
+let MODELS = [{ name: "scene_finale4.glb" }];
 
 let numLoadedModels = 0;
 
@@ -51,7 +51,7 @@ function loadGltfModel(model, onLoaded) {
       let scene = gltf.scene;
       camera = gltf.cameras[0];
       camera.fov = 30;
-      camera.far = 30;
+      camera.far = 32;
       camera.rotation.order = "XZY";
       model.scene = scene;
       gltf.scene.traverse(function (object) {
@@ -176,7 +176,7 @@ function updateSlide() {
 }
 
 function changeChapter(newFrameIndex) {
-  scaleAmount = 10;
+  scaleAmount = 20;
   if (currentKeyFrameIndex < newFrameIndex) {
     goingForward = true;
     currentKeyFrameIndex = newFrameIndex;

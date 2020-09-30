@@ -162,12 +162,28 @@
   }
 }
 
-.icon-bow {
-  background-image: url(img/icon-bow.svg);
+.icon-bow-1 {
+  background-image: url(img/logo_bv1.svg);
+}
+
+.icon-bow-2 {
+  background-image: url(img/logo_bv2.svg);
+}
+.icon-bow-3 {
+  background-image: url(img/logo_bv3.svg);
+}
+.icon-bow-4 {
+  background-image: url(img/logo_bv4.svg);
+}
+
+.icon-bow-1,
+.icon-bow-2,
+.icon-bow-3,
+.icon-bow-4 {
   width: 27px;
-  height: 11px;
+  height: 18px;
   margin-top: 60px;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
   position: relative;
 }
 
@@ -377,7 +393,11 @@ flex: 1;
 */
 
 #loader {
-  font-size: 1.5rem;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  line-height: 100vh;
+  font-size: 1rem;
   color: grey;
   text-align: center;
   margin: 0;
