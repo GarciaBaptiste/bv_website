@@ -172,10 +172,14 @@ function updateSlide() {
   }
   contentPage.children[currentKeyFrameIndex].setAttribute("state", "current");
   previousKeyFrameIndex = currentKeyFrameIndex;
-  navigationBar.setAttribute(
-    "currentChapter",
-    chapterNames[chapterIndexes[currentKeyFrameIndex]]
-  );
+  if (currentKeyFrameIndex > 0) {
+    navigationBar.setAttribute(
+      "currentChapter",
+      chapterNames[chapterIndexes[currentKeyFrameIndex]]
+    );
+  } else {
+    navigationBar.setAttribute("currentChapter", "none");
+  }
 }
 
 function changeChapter(newFrameIndex) {
