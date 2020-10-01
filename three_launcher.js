@@ -62,8 +62,8 @@ function loadGltfModel(model, onLoaded) {
       onLoaded();
     },
     function (xhr) {
-      document.getElementById("loader").innerText =
-        "Chargement " + Math.round((xhr.loaded / xhr.total) * 100) + "%";
+      document.getElementById("loader-foreground").style.width =
+        Math.round((xhr.loaded / xhr.total) * 100) + "%";
     },
     function (error) {
       console.log(error);
