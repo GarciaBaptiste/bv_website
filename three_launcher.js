@@ -188,6 +188,14 @@ function changeChapter(newFrameIndex) {
   }
 }
 
+function toggleMenu() {
+  var closeBurger = document.querySelector(".close-burger");
+  var openBurger = document.querySelector(".open-burger");
+  navigationBar.classList.toggle("navigation-bar-visible");
+  closeBurger.classList.toggle("burger-icon-visible");
+  openBurger.classList.toggle("burger-icon-visible");
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function onWindowResize() {
