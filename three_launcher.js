@@ -34,6 +34,9 @@ function loadModels() {
       ++numLoadedModels;
       if (numLoadedModels === MODELS.length) {
         document.getElementById("index-slide").setAttribute("state", "loaded");
+        document
+          .getElementsByClassName("logo-container")[0]
+          .setAttribute("state", "loaded");
         initRenderer();
         initScene();
       }
@@ -206,7 +209,7 @@ function onWindowResize() {
 let previousKeyFrameIndex = "";
 let currentKeyFrameIndex = 0;
 const keyFrames = [
-  0,
+  0.1,
   4.5,
   8.5,
   12.4,
@@ -223,7 +226,7 @@ const keyFrames = [
   65.3,
   68.5,
 ];
-const chapterIndexes = [null, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
+const chapterIndexes = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
 const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
 function scrolled(event) {

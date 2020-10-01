@@ -431,9 +431,12 @@ flex: 1;
   background: rgba(255, 255, 255, 0);
 }
 
-#index-slide[state="loaded"] .logo-container {
+.logo-container[state="loaded"] {
   margin-top: 50px;
   opacity: 1;
+}
+.logo-container img:hover {
+  cursor: pointer;
 }
 #index-slide[state="loaded"] .invite-scroll-container {
   bottom: 30px;
