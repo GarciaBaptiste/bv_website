@@ -478,6 +478,9 @@ h6 a:hover {
   pointer-events: all;
 }
 @media only screen and (max-width: 700px) {
+  .invite-scroll-container {
+    display: none;
+  }
   br {
     display: none;
   }
