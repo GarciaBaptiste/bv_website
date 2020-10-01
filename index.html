@@ -26,7 +26,10 @@
       import * as GLTFLoader from "./js/GLTFLoader.js";
     </script>
     <section id="context"></section>
-    <section id="content-page">
+    <section id="scroll-detector">
+      <p style="height: 300vh"></p>
+    </section>
+    <section id="content-page" style="pointer-events: none">
       <article class="slide swipe" state="to-come">
         <div class="slide-content intro-slide">
           <div class="empty"></div>
@@ -161,17 +164,30 @@
       <article class="slide swipe" state="to-come">
         <div class="slide-content">
           <div class="icon-bow-4"></div>
-          <p>
-            meril@lebowvosgien.fr
+          <p style="pointer-events: all">
+            <a
+              href="mailto:meril@lebowvosgien.fr"
+              style="text-decoration: none; color: black"
+              >meril@lebowvosgien.fr</a
+            >
             <br />
-            0684250393
+            06 84 25 03 93
           </p>
           <div class="icon-bow-4"></div>
+          <div id="credits">
+            <h6>Crédits</h6>
+            <h6>
+              <a href="http://baptistegarcia.com/" target="blank"
+                >Baptiste Garcia</a
+              >&nbsp;&nbsp;·&nbsp;&nbsp;
+              <a href="http://www.khanh-robert.fr/" target="blank"
+                >Khanh Robert</a
+              >&nbsp;&nbsp;·&nbsp;&nbsp;
+              <a href="https://www.leodurand.com" target="blank">Léo Durand</a>
+            </h6>
+          </div>
         </div>
       </article>
-    </section>
-    <section id="scroll-detector">
-      <p style="height: 300vh"></p>
     </section>
     <div class="logo-container">
       <div class="logo-svg">

@@ -11,6 +11,11 @@
 html {
   font-size: calc(1vw + 1vh);
 }
+
+*::selection {
+  background: black;
+  color: white;
+}
 #navigation-wrapper {
   display: flex;
   justify-content: center;
@@ -448,6 +453,22 @@ flex: 1;
 }
 #burger-icon {
   display: none;
+}
+h6 {
+  font-family: "Benne";
+  font-size: 18px;
+  line-height: 32px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+}
+h6 a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  pointer-events: all;
+}
+h6 a:hover {
+  color: rgba(0, 0, 0, 1);
 }
 @media only screen and (max-width: 700px) {
   #navigation-bar[currentChapter="naissance"] > a.naissance,
