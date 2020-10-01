@@ -337,6 +337,7 @@ canvas {
   justify-content: center;
   align-items: center;
   flex-flow: column wrap;
+  font-size: calc(1.5vw + 16px);
 }
 
 .slide-content p {
@@ -470,7 +471,19 @@ h6 a {
 h6 a:hover {
   color: rgba(0, 0, 0, 1);
 }
+.slide[state="current"] .must-be-accessible * {
+  pointer-events: all;
+}
 @media only screen and (max-width: 700px) {
+  br {
+    display: none;
+  }
+  .bullets {
+    display: none;
+  }
+  h6 a {
+    display: inherit;
+  }
   #navigation-bar[currentChapter="naissance"] > a.naissance,
   #navigation-bar[currentChapter="developpement"] > a.developpement,
   #navigation-bar[currentChapter="realisations"] > a.realisations,
