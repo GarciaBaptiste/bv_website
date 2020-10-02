@@ -1,3 +1,7 @@
+import * as THREE from "./js/three.js";
+import { GLTFLoader } from "./loaders/GLTFLoader.js";
+import { EffectComposer } from "./postprocessing/EffectComposer.js";
+
 window.addEventListener("load", setup);
 window.addEventListener("resize", onWindowResize, false);
 
@@ -45,7 +49,7 @@ function loadModels() {
 }
 
 function loadGltfModel(model, onLoaded) {
-  let loader = new THREE.GLTFLoader();
+  let loader = new GLTFLoader();
   const modelName = "models/" + model.name;
   loader.load(
     modelName,
@@ -83,8 +87,6 @@ function initRenderer() {
   container.appendChild(renderer.domElement);
 }
 
-let directionalLight;
-
 function initScene() {
   window.addEventListener("mousemove", mouseMoved);
   animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
@@ -97,18 +99,6 @@ function initScene() {
 
   const hlight = new THREE.AmbientLight(0xffffff, 0.6);
   worldScene.add(hlight);
-
-  // directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
-  // directionalLight.position.set(100, 10, 150);
-  // directionalLight.target.position.set(0, 0, 0);
-  // directionalLight.castShadow = true;
-  // const d = 100;
-  // directionalLight.shadow.camera.left = -d;
-  // directionalLight.shadow.camera.right = d;
-  // directionalLight.shadow.camera.top = d;
-  // directionalLight.shadow.camera.bottom = -d;
-  // resetGraphicSettings(directionalLight);
-  // worldScene.add(directionalLight);
 
   mesh = MODELS[0].scene;
   worldScene.add(mesh);
@@ -125,8 +115,6 @@ function animate() {
 
 let goingForward = true;
 let delta = 0;
-
-let lastLoop = new Date();
 
 let scaleAmount = 0.7;
 
