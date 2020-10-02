@@ -1,5 +1,6 @@
-import * as THREE from "../build/three.module.js";
+import * as THREE from "./js/three.js";
 import { GLTFLoader } from "./loaders/GLTFLoader.js";
+import { EffectComposer } from "./postprocessing/EffectComposer.js";
 
 window.addEventListener("load", setup);
 window.addEventListener("resize", onWindowResize, false);
