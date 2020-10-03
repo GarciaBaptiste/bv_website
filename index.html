@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-179544621-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-179544621-1");
+    </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -217,23 +232,19 @@
     </section>
     <div id="navigation-wrapper">
       <div id="navigation-bar" class="navigation-bar-visible">
-        <a class="naissance" href="#naissance" onClick="changeChapter(1)">
+        <a class="naissance" href="#" onClick="changeChapter(1)">
           <span class="navigation-dot navigation-dot-green"></span>
           <h4>Naissance</h4>
         </a>
-        <a
-          class="developpement"
-          href="#developpement"
-          onClick="changeChapter(5)"
-        >
+        <a class="developpement" href="#" onClick="changeChapter(5)">
           <span class="navigation-dot navigation-dot-blue"></span>
           <h4>Développement</h4>
         </a>
-        <a class="realisations" href="#realisations" onClick="changeChapter(9)">
+        <a class="realisations" href="#" onClick="changeChapter(9)">
           <span class="navigation-dot navigation-dot-purple"></span>
           <h4>Réalisations</h4></a
         >
-        <a class="contact" href="#contact" onClick="changeChapter(15)">
+        <a class="contact" href="#" onClick="changeChapter(15)">
           <span class="navigation-dot navigation-dot-orange"></span>
           <h4>Contact</h4>
         </a>

@@ -1,5 +1,6 @@
 @font-face {
   font-family: "Benne";
+  src: url("fonts/benne-regular-webfont.woff2") format("woff2");
   src: url("fonts/Benne-Regular.otf") format("opentype");
 }
 

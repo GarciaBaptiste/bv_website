@@ -13,7 +13,7 @@ let previousScroll = 0;
 let mesh = null;
 let navigationBar;
 
-let MODELS = [{ name: "scene_finale4.glb" }];
+let MODELS = [{ name: "scene_finale10.glb" }];
 
 let numLoadedModels = 0;
 
@@ -53,8 +53,7 @@ function loadGltfModel(model, onLoaded) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
-      camera.fov = 30;
-      camera.far = 32;
+      camera.far = 35;
       camera.rotation.order = "XZY";
       model.scene = scene;
       gltf.scene.traverse(function (object) {
@@ -83,8 +82,6 @@ function initRenderer() {
   container.appendChild(renderer.domElement);
 }
 
-let directionalLight;
-
 function initScene() {
   window.addEventListener("mousemove", mouseMoved);
   animLength = Math.floor(gltf.animations[0].duration * 100) / 100;
@@ -93,22 +90,10 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 0, 25);
+  worldScene.fog = new THREE.Fog(0xffffff, 0, 30);
 
   const hlight = new THREE.AmbientLight(0xffffff, 0.6);
   worldScene.add(hlight);
-
-  // directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
-  // directionalLight.position.set(100, 10, 150);
-  // directionalLight.target.position.set(0, 0, 0);
-  // directionalLight.castShadow = true;
-  // const d = 100;
-  // directionalLight.shadow.camera.left = -d;
-  // directionalLight.shadow.camera.right = d;
-  // directionalLight.shadow.camera.top = d;
-  // directionalLight.shadow.camera.bottom = -d;
-  // resetGraphicSettings(directionalLight);
-  // worldScene.add(directionalLight);
 
   mesh = MODELS[0].scene;
   worldScene.add(mesh);
