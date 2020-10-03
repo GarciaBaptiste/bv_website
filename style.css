@@ -465,7 +465,7 @@ h6 {
   font-weight: 400;
   color: rgba(0, 0, 0, 0.5);
 }
-h6 a {
+.slide[state="current"] h6 a {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.5);
   transition: 0.3s;
