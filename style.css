@@ -1,7 +1,13 @@
 @font-face {
   font-family: "Benne";
-  src: url("fonts/benne-regular-webfont.woff2") format("woff2");
-  src: url("fonts/Benne-Regular.otf") format("opentype");
+  src: url("fonts/benne-regular-webfont.woff2") format("woff2"),
+    url("fonts/Benne-Regular.otf") format("opentype");
+  /* Métriques verticales forcées : sans ça, Windows utilise usWinAscent/Descent
+     (832/448) et macOS hhea (630/370), d'où un texte décalé verticalement
+     et différent selon la plateforme. */
+  ascent-override: 92%;
+  descent-override: 36%;
+  line-gap-override: 0%;
 }
 
 @font-face {
@@ -63,7 +69,8 @@ html {
   color: rgba(0, 0, 0, 0.3);
   text-align: center;
   justify-content: center;
-  padding: 24px 2vh;
+  align-items: center;
+  padding: 27px 2vh 21px;
   text-decoration: none;
   font-size: 17px;
   transition: all 700ms cubic-bezier(0.32, 0.02, 0.3, 1);
@@ -79,7 +86,7 @@ html {
   height: 10px;
   width: 10px;
   border-radius: 50%;
-  margin-top: 2px;
+  flex-shrink: 0;
   margin-right: 10px;
   display: inline-block;
 }
@@ -374,10 +381,16 @@ justify-content: space-between;
   border: none;
   border-radius: 100px;
   color: white;
-  padding: 15px 32px 10px 32px;
+  padding: 19px 32px 21px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  /* Centrage vertical réel : sans ça, la ligne hérite de la grande taille
+     de police du parent et le h5 (18px) se retrouve calé trop bas. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
   margin: 4px 2px;
   cursor: pointer;
 }
@@ -469,16 +482,58 @@ h6 {
 .slide[state="current"] h6 a {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.5);
-  transition: 0.3s;
+  transition: color 300ms ease;
   pointer-events: all;
 }
-h6 a:hover {
+.slide[state="current"] h6 a:hover {
   color: rgba(0, 0, 0, 1);
 }
 .slide[state="current"] .must-be-accessible * {
   pointer-events: all;
 }
+/* Desktop : la pastille de chaque chapitre devient une rangée de pastilles,
+   une par écran (même taille, même couleur, même place) : pleine pour
+   l'écran affiché, contour pour les autres */
+.screen-dots {
+  display: inline-flex;
+  align-items: center;
+}
+.screen-dots-before {
+  margin-right: 7px; /* + 3px de zone de clic = 10px comme la pastille d'origine */
+  margin-left: -3px;
+}
+.screen-dots.naissance { color: #43eb99; }
+.screen-dots.developpement { color: #2873e4; }
+.screen-dots.realisations { color: #c981e2; }
+.screen-dots.contact { color: #ffa800; }
+#navigation-bar a > .navigation-dot {
+  display: none; /* remplacée par .screen-dots sur desktop */
+}
+.screen-dot {
+  padding: 3px; /* zone de clic un peu plus large que la pastille */
+  cursor: pointer;
+}
+.screen-dot::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  box-sizing: border-box;
+  transition: background-color 2s ease;
+}
+.screen-dot.is-current::before {
+  background-color: currentColor;
+}
+
 @media only screen and (max-width: 700px) {
+  .screen-dots {
+    display: none;
+  }
+  #navigation-bar a > .navigation-dot {
+    display: inline-block; /* menu burger : pastille unique d'origine */
+  }
   .invite-scroll-container {
     display: none;
   }
@@ -532,7 +587,7 @@ h6 a:hover {
     transition: all 700ms cubic-bezier(0.32, 0.02, 0.3, 1);
   }
   #navigation-bar a:first-child {
-    padding-top: 37px;
+    padding-top: 28px;
   }
   .slide-content {
     width: 80%;
@@ -564,3 +619,11 @@ h6 a:hover {
     opacity: 0;
   }
 }
+
+/* Pendant un tracé dans la scène 3D : aucune sélection de texte */
+body.is-drawing,
+body.is-drawing * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+

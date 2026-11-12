@@ -1,21 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-179544621-1"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "UA-179544621-1");
-    </script>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -40,6 +25,11 @@
     <script type="module">
       import * as GLTFLoader from "./js/GLTFLoader.js";
     </script>
+    <script type="module" src="js/DRACOLoader.js"></script>
+    <script type="module" src="js/BasisTextureLoader.js"></script>
+    <script type="module" src="js/DecalGeometry.js"></script>
+    <script type="module" src="scene_effects.js"></script>
+    <script type="module" src="post_effects.js"></script>
     <section id="context"></section>
     <section id="scroll-detector">
       <p style="height: 300vh"></p>
@@ -142,7 +132,10 @@
       <article class="slide swipe" state="to-come">
         <div class="slide-content">
           <div class="icon-bow-3"></div>
-          <p>Aujourd'hui, je réalise des événements culturels et caritatifs,</p>
+          <p>
+            Aujourd'hui, je réalise des événements<br />
+            culturels et caritatifs,
+          </p>
           <div class="icon-bow-3"></div>
         </div>
       </article>

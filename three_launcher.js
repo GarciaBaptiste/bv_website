@@ -9,20 +9,31 @@ let mixer = null;
 let gltf = null;
 let contentPage = null;
 let animLength = null;
-let previousScroll = 0;
 let mesh = null;
 let navigationBar;
 
-let MODELS = [{ name: "scene_finale10.glb" }];
+let MODELS = [{ name: "scene_finale12.glb" }]; // scène nettoyée, fusionnée et compressée (voir models/README_scene.md)
 
 let numLoadedModels = 0;
 
+// Éclairage (mesuré : x2 sur les ponctuelles + ambiance 0.6 -> 0.5 donne
+// +25 à 50 % de contraste local sans zones brûlées ; x3 seul blanchit l'image)
+const POINT_LIGHT_BOOST = 2;
+const AMBIENT_INTENSITY = 0.5;
+
 function setup() {
-  document
-    .getElementById("scroll-detector")
-    .addEventListener("scroll", scrolled);
+  scrollDetector = document.getElementById("scroll-detector");
+  scrollDetector.addEventListener("scroll", scrolled, { passive: true });
+  window.addEventListener("wheel", wheeled, { passive: true });
+  window.addEventListener("keydown", keyPressed);
+  document.addEventListener("visibilitychange", onVisibilityRestored);
+  window.addEventListener("focus", onVisibilityRestored);
+  window.addEventListener("pageshow", onVisibilityRestored);
+  resetScrollDetector();
   contentPage = document.getElementById("content-page");
   navigationBar = document.getElementById("navigation-bar");
+  buildScreenDots();
+  document.addEventListener("pointerdown", closeMenuOnOutsideClick, true);
   updateSlide();
   loadModels();
 }
@@ -46,6 +57,11 @@ function loadModels() {
 
 function loadGltfModel(model, onLoaded) {
   let loader = new THREE.GLTFLoader();
+  // Géométrie compressée en Draco : décodeur WebAssembly dans js/draco/
+  const draco = new THREE.DRACOLoader();
+  draco.setDecoderPath("js/draco/");
+  draco.setDecoderConfig({ type: "wasm" });
+  loader.setDRACOLoader(draco);
   const modelName = "models/" + model.name;
   loader.load(
     modelName,
@@ -53,12 +69,15 @@ function loadGltfModel(model, onLoaded) {
       gltf = gltf_response;
       let scene = gltf.scene;
       camera = gltf.cameras[0];
-      camera.far = 35;
+      camera.far = 43.75; // distance d'affichage (+25 % : 35 -> 43.75)
       camera.rotation.order = "XZY";
       model.scene = scene;
       gltf.scene.traverse(function (object) {
         if (object.isLight) {
           object.intensity = object.intensity / 2000;
+          // Petites lumières ponctuelles renforcées (x2), compensées par une
+          // ambiance plus basse : plus de modelé sans blanchir l'image
+          if (object.isPointLight) object.intensity *= POINT_LIGHT_BOOST;
         }
       });
       onLoaded();
@@ -90,9 +109,11 @@ function initScene() {
   setSizeCamera();
   worldScene = new THREE.Scene();
   worldScene.background = new THREE.Color(0xffffff);
-  worldScene.fog = new THREE.Fog(0xffffff, 0, 30);
+  // Brouillard allongé dans la même proportion (30 -> 37.5) : sinon le blanc
+  // complet arrive avant la limite d'affichage et rien de plus n'est visible
+  worldScene.fog = new THREE.Fog(0xffffff, 0, 37.5);
 
-  const hlight = new THREE.AmbientLight(0xffffff, 0.6);
+  const hlight = new THREE.AmbientLight(0xffffff, AMBIENT_INTENSITY);
   worldScene.add(hlight);
 
   mesh = MODELS[0].scene;
@@ -100,6 +121,13 @@ function initScene() {
 
   mixer = new THREE.AnimationMixer(camera);
   mixer.clipAction(gltf.animations[0]).play();
+  if (window.initSceneEffects) {
+    window.sceneEffects = window.initSceneEffects(worldScene, camera, mesh, renderer);
+  }
+  // Post-traitement : effet maquette (tilt-shift), grain, vignettage
+  if (window.initPostEffects) {
+    window.postEffects = window.initPostEffects(renderer);
+  }
   animate();
 }
 
@@ -109,33 +137,30 @@ function animate() {
 }
 
 let goingForward = true;
-let delta = 0;
 
-let lastLoop = new Date();
+// Vitesse de lecture de l'animation caméra, en secondes d'animation par seconde réelle.
+// (l'ancien pas fixe de 0.02 par frame donnait 1.2 à 60 fps ; légèrement accéléré)
+const BASE_PLAYBACK_SPEED = 1.7;
+// Plafond du pas de temps : évite un saut énorme au retour sur l'onglet
+const MAX_FRAME_DT = 0.1;
 
 let scaleAmount = 0.7;
 
 function render() {
-  const roundedTime = Math.round(mixer.time * 10) / 10;
+  const dt = Math.min(clock.getDelta(), MAX_FRAME_DT);
   if (mixer) {
-    if (goingForward) {
-      mixer.timeScale = scaleAmount;
-      if (roundedTime < keyFrames[currentKeyFrameIndex]) {
-        delta = 0.02;
-      } else {
-        delta = 0;
-      }
-    } else {
-      mixer.timeScale = -scaleAmount;
-      if (roundedTime > keyFrames[currentKeyFrameIndex]) {
-        delta = 0.02;
-      } else {
-        delta = 0;
-      }
-    }
-    mixer.update(delta);
+    const target = keyFrames[currentKeyFrameIndex];
+    const remaining = target - mixer.time;
+    // Distance d'animation à parcourir cette frame, indépendante du framerate
+    let step = BASE_PLAYBACK_SPEED * scaleAmount * dt;
+    if (Math.abs(remaining) <= step) step = Math.abs(remaining); // on s'arrête pile sur la keyframe
+    goingForward = remaining >= 0;
+    mixer.timeScale = goingForward ? 1 : -1;
+    mixer.update(step);
   }
-  renderer.render(worldScene, camera);
+  if (window.sceneEffects) window.sceneEffects.update(dt);
+  if (window.postEffects) window.postEffects.render(worldScene, camera, dt);
+  else renderer.render(worldScene, camera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,19 +190,55 @@ function updateSlide() {
   } else {
     navigationBar.setAttribute("currentChapter", "none");
   }
+  for (const dot of screenDots) {
+    dot.classList.toggle("is-current", Number(dot.dataset.screen) === currentKeyFrameIndex);
+  }
+}
+
+// Navigation desktop : un cercle par écran à côté de chaque chapitre
+// (plein = écran affiché, contour = autres écrans). Clic = aller à l'écran.
+let screenDots = [];
+function buildScreenDots() {
+  const links = navigationBar.querySelectorAll("a");
+  chapterNames.forEach((name, c) => {
+    const link = Array.from(links).find((a) => a.classList.contains(name));
+    if (!link) return;
+    // Toutes les pastilles à gauche du titre, à la place de la pastille d'origine
+    const before = document.createElement("span");
+    before.className = "screen-dots screen-dots-before " + name;
+    chapterIndexes.forEach((chapter, i) => {
+      if (chapter !== c || i === 0) return; // l'écran 0 est l'intro
+      const dot = document.createElement("span");
+      dot.className = "screen-dot";
+      dot.dataset.screen = i;
+      dot.title = "Écran " + i;
+      dot.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // ne pas déclencher le lien du chapitre
+        changeChapter(i);
+      });
+      before.appendChild(dot);
+      screenDots.push(dot);
+    });
+    const title = link.querySelector("h4");
+    link.insertBefore(before, title);
+  });
 }
 
 function changeChapter(newFrameIndex) {
+  if (currentKeyFrameIndex === newFrameIndex) return;
   scaleAmount = 20;
-  if (currentKeyFrameIndex < newFrameIndex) {
-    goingForward = true;
-    currentKeyFrameIndex = newFrameIndex;
-    updateSlide();
-  } else if (currentKeyFrameIndex > newFrameIndex) {
-    goingForward = false;
-    currentKeyFrameIndex = newFrameIndex;
-    updateSlide();
-  }
+  currentKeyFrameIndex = newFrameIndex;
+  updateSlide();
+}
+
+// Menu burger (écrans étroits) : le moindre clic ou toucher en dehors de la
+// barre de navigation referme le menu
+function closeMenuOnOutsideClick(e) {
+  const menuOpen = !navigationBar.classList.contains("navigation-bar-visible");
+  if (!menuOpen || !window.matchMedia("(max-width: 700px)").matches) return;
+  if (e.target.closest && e.target.closest("#navigation-bar")) return;
+  toggleMenu();
 }
 
 function toggleMenu() {
@@ -191,8 +252,8 @@ function toggleMenu() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function onWindowResize() {
-  scrolled();
-  setSizeCamera();
+  resetScrollDetector();
+  if (camera && renderer) setSizeCamera();
 }
 
 let previousKeyFrameIndex = "";
@@ -218,29 +279,62 @@ const keyFrames = [
 const chapterIndexes = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3];
 const chapterNames = ["naissance", "developpement", "realisations", "contact"];
 
-function scrolled(event) {
+// La caméra est-elle arrivée sur la keyframe courante ?
+function cameraArrived() {
+  return mixer && Math.abs(mixer.time - keyFrames[currentKeyFrameIndex]) < 0.001;
+}
+
+function step(direction) {
+  if (!mixer || !cameraArrived()) return;
+  const next = currentKeyFrameIndex + direction;
+  if (next < 0 || next >= keyFrames.length) return;
   scaleAmount = 0.7;
-  const roundedTime = Math.round(mixer.time * 10) / 10;
-  if (previousScroll < this.scrollTop) {
-    if (
-      roundedTime < keyFrames[currentKeyFrameIndex + 1] &&
-      roundedTime >= keyFrames[currentKeyFrameIndex]
-    ) {
-      currentKeyFrameIndex++;
-      goingForward = true;
-    }
-  } else if (previousScroll > this.scrollTop) {
-    if (
-      roundedTime <= keyFrames[currentKeyFrameIndex] &&
-      roundedTime > keyFrames[currentKeyFrameIndex - 1]
-    ) {
-      currentKeyFrameIndex--;
-      goingForward = false;
-    }
-  }
-  this.scrollTop = window.innerHeight;
-  previousScroll = this.scrollTop;
+  currentKeyFrameIndex = next;
   updateSlide();
+}
+
+let scrollDetector = null;
+
+function resetScrollDetector() {
+  if (!scrollDetector) return;
+  ignoreNextScroll = true;
+  scrollDetector.scrollTop = window.innerHeight;
+}
+
+let ignoreNextScroll = false;
+
+function scrolled() {
+  // Le détecteur est toujours recentré sur window.innerHeight : on compare
+  // la position courante à ce centre pour connaître le sens du scroll.
+  const center = window.innerHeight;
+  const pos = scrollDetector.scrollTop;
+  if (ignoreNextScroll && Math.abs(pos - center) < 1) {
+    ignoreNextScroll = false;
+    return;
+  }
+  ignoreNextScroll = false;
+  if (pos > center + 0.5) step(1);
+  else if (pos < center - 0.5) step(-1);
+  resetScrollDetector();
+}
+
+// Filet de sécurité : si le détecteur ne reçoit plus d'événements scroll
+// (ex. retour sur l'onglet, scroll déjà en butée), la molette fait quand même avancer.
+function wheeled(evt) {
+  if (evt.ctrlKey) return; // zoom navigateur
+  if (Math.abs(evt.deltaY) < 1) return;
+  step(evt.deltaY > 0 ? 1 : -1);
+}
+
+function keyPressed(evt) {
+  if (["ArrowDown", "PageDown", " "].includes(evt.key)) step(1);
+  else if (["ArrowUp", "PageUp"].includes(evt.key)) step(-1);
+}
+
+function onVisibilityRestored() {
+  if (document.visibilityState !== "visible") return;
+  if (clock) clock.getDelta(); // ignore le temps passé hors de l'onglet
+  resetScrollDetector();
 }
 
 function mouseMoved(evt) {
